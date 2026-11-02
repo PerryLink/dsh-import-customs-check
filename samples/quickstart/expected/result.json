@@ -1,0 +1,337 @@
+{
+  "sample": "samples/quickstart/input/import-set.json",
+  "check": {
+    "shipment_id": "SHP-2026-0618",
+    "input_sha256": "ca764bab6159e4ce9ea4fb02635e9a9ddb8e808aa570514f775b14de1d24b768",
+    "documents": [
+      {
+        "key": "invoice",
+        "label": "商业发票",
+        "field_count": 9
+      },
+      {
+        "key": "packing_list",
+        "label": "装箱单",
+        "field_count": 5
+      },
+      {
+        "key": "bill_of_lading",
+        "label": "提单",
+        "field_count": 5
+      },
+      {
+        "key": "customs_declaration",
+        "label": "报关单",
+        "field_count": 9
+      }
+    ],
+    "fields": [
+      {
+        "field": "invoice_no",
+        "label": "发票号",
+        "status": "consistent",
+        "compared": 4,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "INV-2026-0618",
+            "normalized": "INV-2026-0618",
+            "invalid": false
+          },
+          {
+            "document": "packing_list",
+            "label": "装箱单",
+            "raw": "INV-2026-0618",
+            "normalized": "INV-2026-0618",
+            "invalid": false
+          },
+          {
+            "document": "bill_of_lading",
+            "label": "提单",
+            "raw": "INV-2026-0618",
+            "normalized": "INV-2026-0618",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "INV-2026-0618",
+            "normalized": "INV-2026-0618",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "contract_no",
+        "label": "合同号",
+        "status": "consistent",
+        "compared": 4,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "CT-2026-0042",
+            "normalized": "CT-2026-0042",
+            "invalid": false
+          },
+          {
+            "document": "packing_list",
+            "label": "装箱单",
+            "raw": "CT-2026-0042",
+            "normalized": "CT-2026-0042",
+            "invalid": false
+          },
+          {
+            "document": "bill_of_lading",
+            "label": "提单",
+            "raw": "CT-2026-0042",
+            "normalized": "CT-2026-0042",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "CT-2026-0042",
+            "normalized": "CT-2026-0042",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "packages",
+        "label": "件数",
+        "status": "consistent",
+        "compared": 4,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "120",
+            "normalized": "120",
+            "invalid": false
+          },
+          {
+            "document": "packing_list",
+            "label": "装箱单",
+            "raw": "120",
+            "normalized": "120",
+            "invalid": false
+          },
+          {
+            "document": "bill_of_lading",
+            "label": "提单",
+            "raw": "120",
+            "normalized": "120",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "120",
+            "normalized": "120",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "gross_weight_kg",
+        "label": "毛重",
+        "status": "mismatch",
+        "compared": 4,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "2450.00",
+            "normalized": "2450.000",
+            "invalid": false
+          },
+          {
+            "document": "packing_list",
+            "label": "装箱单",
+            "raw": "2450.00",
+            "normalized": "2450.000",
+            "invalid": false
+          },
+          {
+            "document": "bill_of_lading",
+            "label": "提单",
+            "raw": "2450.00",
+            "normalized": "2450.000",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "2450.50",
+            "normalized": "2450.500",
+            "invalid": false
+          }
+        ],
+        "note": "毛重：商业发票 2450.00 / 装箱单 2450.00 / 提单 2450.00 / 报关单 2450.50"
+      },
+      {
+        "field": "net_weight_kg",
+        "label": "净重",
+        "status": "consistent",
+        "compared": 3,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "2280.00",
+            "normalized": "2280.000",
+            "invalid": false
+          },
+          {
+            "document": "packing_list",
+            "label": "装箱单",
+            "raw": "2280.00",
+            "normalized": "2280.000",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "2280.00",
+            "normalized": "2280.000",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "amount",
+        "label": "金额",
+        "status": "consistent",
+        "compared": 2,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "184500.00",
+            "normalized": "184500.00",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "184500.00",
+            "normalized": "184500.00",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "currency",
+        "label": "币种",
+        "status": "consistent",
+        "compared": 2,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "USD",
+            "normalized": "USD",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "USD",
+            "normalized": "USD",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "hs_code",
+        "label": "HS 编码",
+        "status": "consistent",
+        "compared": 2,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "8471.30.00",
+            "normalized": "84713000",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "84713000",
+            "normalized": "84713000",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      },
+      {
+        "field": "origin_country",
+        "label": "原产国",
+        "status": "consistent",
+        "compared": 3,
+        "values": [
+          {
+            "document": "invoice",
+            "label": "商业发票",
+            "raw": "CN",
+            "normalized": "CN",
+            "invalid": false
+          },
+          {
+            "document": "bill_of_lading",
+            "label": "提单",
+            "raw": "CN",
+            "normalized": "CN",
+            "invalid": false
+          },
+          {
+            "document": "customs_declaration",
+            "label": "报关单",
+            "raw": "CN",
+            "normalized": "CN",
+            "invalid": false
+          }
+        ],
+        "note": ""
+      }
+    ],
+    "summary": {
+      "total": 9,
+      "consistent": 8,
+      "mismatch": 1,
+      "single_source": 0,
+      "not_provided": 0
+    },
+    "mismatch_fields": [
+      "gross_weight_kg"
+    ],
+    "pass": false
+  },
+  "elements": {
+    "complete": false,
+    "total": 12,
+    "present": 11,
+    "missing": [
+      {
+        "key": "port_of_loading",
+        "label": "装货港"
+      }
+    ]
+  },
+  "export": {
+    "path": "exports/import-check-ca764bab6159.csv",
+    "sha256": "91f0617918903db85139a4461b5635bb1d22e0357b2e4c96b833cdaf18ce8198",
+    "bytes": 693,
+    "rows": 9,
+    "text": "field,label,status,invoice,packing_list,bill_of_lading,customs_declaration,note\ninvoice_no,发票号,consistent,INV-2026-0618,INV-2026-0618,INV-2026-0618,INV-2026-0618,\ncontract_no,合同号,consistent,CT-2026-0042,CT-2026-0042,CT-2026-0042,CT-2026-0042,\npackages,件数,consistent,120,120,120,120,\ngross_weight_kg,毛重,mismatch,2450.00,2450.00,2450.00,2450.50,毛重：商业发票 2450.00 / 装箱单 2450.00 / 提单 2450.00 / 报关单 2450.50\nnet_weight_kg,净重,consistent,2280.00,2280.00,,2280.00,\namount,金额,consistent,184500.00,,,184500.00,\ncurrency,币种,consistent,USD,,,USD,\nhs_code,HS 编码,consistent,8471.30.00,,,84713000,\norigin_country,原产国,consistent,CN,,CN,CN,\n"
+  }
+}

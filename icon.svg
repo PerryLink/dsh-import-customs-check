@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Import customs check">
+  <rect width="128" height="128" rx="28" fill="#0b1020"/>
+  <rect x="10" y="10" width="108" height="108" rx="22" fill="#141b30" stroke="#93c5fd" stroke-width="3"/>
+  <rect x="24" y="24" width="42" height="56" rx="5" fill="#f4f7ff" opacity="0.96"/>
+  <rect x="62" y="40" width="42" height="56" rx="5" fill="#dbeafe" opacity="0.96"/>
+  <path d="M32 38h26M32 48h26M32 58h18" stroke="#0b1020" stroke-width="3" stroke-linecap="round"/>
+  <path d="M70 56h26M70 66h26M70 76h16" stroke="#0b1020" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="88" cy="88" r="16" fill="#22c55e"/>
+  <path d="M81 88l5 5 10-11" stroke="#052e16" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

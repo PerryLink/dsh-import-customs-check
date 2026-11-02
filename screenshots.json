@@ -1,0 +1,15 @@
+[
+  {
+    "path": "docs/assets/quickstart.png",
+    "kind": "quickstart",
+    "alt": "dsh-import-customs-check quickstart terminal output",
+    "caption": "Real command: node samples/quickstart/run.mjs --check — a synthetic four-document import set yields 8 consistent fields, 1 gross-weight mismatch, 11/12 declaration elements, and a matching CSV hash. Rendered from the captured terminal output with the CJK font msyh.ttc.",
+    "command": "node samples/quickstart/run.mjs --check",
+    "run_at": "2026-11-02T15:07:27Z",
+    "output_sha256": "781d13c1176e4be9f292b338c950e4ba2b7e3a7e8408858e672ca041a87ee4e5",
+    "output_path": "samples/quickstart/expected/result.json",
+    "log": "docs/assets/quickstart.log",
+    "log_sha256": "8118f942e8408d09892039e00f0a2aa9a38aedeba18866e5c8f4e31f4f268c78",
+    "image_sha256": "90af93df59acdf93c8f60caadce4c940b36cac50fd7d15129bb5c77ec771bcdf"
+  }
+]

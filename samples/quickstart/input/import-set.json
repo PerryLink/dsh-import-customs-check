@@ -1,0 +1,51 @@
+{
+  "shipment_id": "SHP-2026-0618",
+  "documents": {
+    "invoice": {
+      "invoice_no": "INV-2026-0618",
+      "contract_no": "CT-2026-0042",
+      "packages": 120,
+      "gross_weight_kg": "2450.00",
+      "net_weight_kg": "2280.00",
+      "amount": "184500.00",
+      "currency": "USD",
+      "hs_code": "8471.30.00",
+      "origin_country": "CN"
+    },
+    "packing_list": {
+      "invoice_no": "INV-2026-0618",
+      "contract_no": "CT-2026-0042",
+      "packages": "120",
+      "gross_weight_kg": "2450.00",
+      "net_weight_kg": "2280.00"
+    },
+    "bill_of_lading": {
+      "invoice_no": "INV-2026-0618",
+      "contract_no": "CT-2026-0042",
+      "packages": "120",
+      "gross_weight_kg": "2450.00",
+      "origin_country": "CN"
+    },
+    "customs_declaration": {
+      "declaration_no": "3101202606180001",
+      "declaration_date": "2026-06-20",
+      "domestic_consignee": "上海远洋国际贸易有限公司",
+      "overseas_consignor": "PACIFIC TECH PTE LTD",
+      "transport_mode": "水路运输",
+      "transport_name": "COSCO SHIPPING ROSE / 0618E",
+      "bill_of_lading_no": "COSU6389210450",
+      "supervision_mode": "一般贸易",
+      "duty_nature": "一般征税",
+      "origin_country": "CN",
+      "domestic_destination": "上海",
+      "invoice_no": "INV-2026-0618",
+      "contract_no": "CT-2026-0042",
+      "packages": 120,
+      "gross_weight_kg": "2450.50",
+      "net_weight_kg": "2280.00",
+      "amount": "184500.00",
+      "currency": "USD",
+      "hs_code": "84713000"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+req_id,metric,threshold,actual,script,evidence_sha256,pass,source,counted
+IMP-A01,field check,fields=9 consistent=8 mismatch=1 pass=false,fields=9 consistent=8 mismatch=1 pass=false,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A02,HS normalization,2 sources normalize to 84713000,sources=2 unique=1,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A03,gross weight mismatch,4 sources with declaration 2450.50,sources=4 declared=2450.50,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A04,strict mode,E_IMPORT_FIELD_MISMATCH,E_IMPORT_FIELD_MISMATCH,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A05,12 elements,present=11 missing=1,present=11 missing=port_of_loading,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A06,complete elements,12/12,12/12,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A07,check CSV,rows=9 sha ok,rows=9 sha=ok,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A08,missing document,E_IMPORT_DOC_MISSING,E_IMPORT_DOC_MISSING,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A09,export path safety,traversal rejected,E_IMPORT_PATH_INVALID,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+IMP-A10,document coverage,fields=9/5/5/9,fields=9/5/5/9,scripts/acceptance.mjs,93caa54bf45b22cb7627dc8172e5093c43cc3f10c61651e18224c3f11579c8c4,true,public/synthetic,false
+PS1-QS01,quickstart golden,1/1,1,samples/quickstart/run.mjs,781d13c1176e4be9f292b338c950e4ba2b7e3a7e8408858e672ca041a87ee4e5,true,synthetic/quickstart,true

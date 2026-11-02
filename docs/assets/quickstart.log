@@ -1,0 +1,9 @@
+$ node samples/quickstart/run.mjs --check
+dsh-import-customs-check quickstart - synthetic import document set (not a real shipment)
+documents: 商业发票 9 field(s); 装箱单 5 field(s); 提单 5 field(s); 报关单 9 field(s)
+fields: 8 consistent / 1 mismatch / 0 single-source / 0 absent
+mismatch gross_weight_kg (毛重): 商业发票 2450.00 / 装箱单 2450.00 / 提单 2450.00 / 报关单 2450.50
+customs declaration elements: 11/12 present; missing 装货港
+check CSV exports/import-check-ca764bab6159.csv: 9 rows, 693 bytes, sha256 91f061791890...
+golden samples/quickstart/expected/result.json matches
+quickstart ok
