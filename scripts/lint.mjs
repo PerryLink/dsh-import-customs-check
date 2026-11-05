@@ -40,29 +40,25 @@ for (const entry of [
   'docs/assets',
   'TROUBLESHOOTING.md',
   'README.md',
-  'README-zh.md',
-  'README-es.md',
-  'README-pt.md',
-  'README-hi.md',
   'LICENSE',
   'NOTICE',
 ]) {
   check(files.includes(entry), `files[] must include ${entry}`)
 }
 
-const readmeZh = read('README-zh.md')
-const readme = read('README.md')
+const readmeZh = read('README.md')
+const readme = read('README.en.md')
 const troubleshooting = read('TROUBLESHOOTING.md')
 for (const [label, text, patterns] of [
   [
-    'README-zh',
+    'README',
     readmeZh,
-    [/一句话/, /适合[\s\S]*不适合/, /## 输入/, /## 输出/, /## 示例/, /## 权限/, /^#{2,3}\s*FAQ/m, new RegExp(pkg.version.replace(/\./g, '\\.'))],
+    [/它是什么/, /适合[\s\S]*不适合/, /## 输入/, /## 输出/, /## 示例/, /## 权限/, /^#{2,3}\s*FAQ/m, new RegExp(pkg.version.replace(/\./g, '\\.'))],
   ],
   [
-    'README',
+    'README.en',
     readme,
-    [/One-liner/i, /Fit/i, /## Input/i, /## Output/i, /## Example/i, /## Permissions/i, /FAQ/i, new RegExp(pkg.version.replace(/\./g, '\\.'))],
+    [/What it is/i, /Fit/i, /## Input/i, /## Output/i, /## Example/i, /## Permissions/i, /FAQ/i, new RegExp(pkg.version.replace(/\./g, '\\.'))],
   ],
 ]) {
   for (const pattern of patterns) check(pattern.test(text), `${label} is missing section matching ${pattern}`)
