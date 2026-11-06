@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-light.svg" width="100%" alt="dsh-import-customs-check 数据流：import-set.json（invoice / packing_list / bill_of_lading / customs_declaration）→ import.check（9 字段）与 import.elements（12 要素）→ import.export（CSV）→ $DSH_HOME/dsh-import-customs-check/exports/；全程本地，源 JSON 只读">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-hero-zh-dark.webp">
+  <img src="docs/assets/dsh-import-customs-check-hero-zh-light.webp" width="100%" alt="dsh-import-customs-check 配图：左列是插件名与两行价值句；右侧是四份进口单证（发票 9/9、装箱单 5/9、提单 5/9、报关单 9/9），汇入 9 个字段的对照——毛重在报关单上是 2450.50，其余三份是 2450.00；下方报关单 12 项要素只有 11 项，装货港缺；最后是 CSV 导出行">
 </picture>
 
 # dsh-import-customs-check
@@ -38,6 +38,11 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 - **适合**：一票进口货物的发票、装箱单、提单、报关单已经整理成 JSON；想在申报前核对发票号、合同号、件数、毛重、净重、金额、币种、HS 编码、原产国是否一致；想确认报关单 12 项表头要素有没有漏填。
 - **不适合**：PDF、扫描件、图片或 Excel 直接输入（本包不做 OCR，请先人工整理成 JSON）；商品行级别的 SKU / 数量 / 单价核对；归类裁定、原产地规则、完税价格或监管证件判断；替代报关行、海关或律师的合规意见；多票货物混在一个文件里。
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check 结构图：左侧是高高的 import-set.json 单证集，列出四份单证的字段覆盖（发票 9/9、装箱单 5/9、提单 5/9、报关单 9/9，只读、≤5 MB），经一条总线分给两条互不混用的通道。A 是一致性记分台：先规范化（转大写、合并/去空格、去逗号、HS 去点/连字符、0.001 kg 与 0.01 half-up），9 个字段各落四态之一；样例 8 一致、1 不一致（报关单毛重 2450.50 对其余三份 2450.00），所以 pass=false，strict 会抛 E_IMPORT_FIELD_MISMATCH。B 是报关单 12 格要素条：11 项在、装货港缺，complete=false，且不影响 pass。只有 A 通向 import.export，按 9 行 CSV 加 sha256 写到 $DSH_HOME/dsh-import-customs-check/exports/">
+</picture>
 
 ## 三步上手
 
@@ -329,7 +334,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-当前版本 `0.1.0`，58 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。开头流程图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成（Python 标准库，纯 SVG、命令 token 文案、深浅双版），可重复执行；`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
+当前版本 `0.1.0`，58 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成：hero 横幅用 Pillow（zh / en × 深浅共四张），结构图是手写 SVG（深浅双版），可重复执行（`python scripts/gen-readme-assets.py`）；旧的单版流程图保留在 `docs/assets/` 供外链使用，README 只引用新生成的 hero 与 flow-v5。`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
 
 Topics：`dsh`、`dsh-plugin`、`deepseek-harness`、`import`、`customs`、`trade-compliance`、`document-check`、`packing-list`、`bill-of-lading`、`perrylink`
 

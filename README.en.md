@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-light.svg" width="100%" alt="dsh-import-customs-check data flow: import-set.json (invoice / packing_list / bill_of_lading / customs_declaration) → import.check (9 fields) and import.elements (12 elements) → import.export (CSV) → $DSH_HOME/dsh-import-customs-check/exports/; fully local, the source JSON is read-only">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-hero-en-dark.webp">
+  <img src="docs/assets/dsh-import-customs-check-hero-en-light.webp" width="100%" alt="dsh-import-customs-check: the plugin name and two value lines on the left; on the right the four import documents (invoice 9/9, packing list 5/9, bill of lading 5/9, customs declaration 9/9) feed the nine-field comparison — gross weight reads 2450.50 on the declaration against 2450.00 on the other three; below, 11 of the declaration's 12 elements are present and port of loading is missing; the CSV export line closes the card">
 </picture>
 
 # dsh-import-customs-check
@@ -38,6 +38,11 @@ In one sentence: read one import shipment's four-document JSON (invoice, packing
 
 - **Fits:** one import shipment whose invoice, packing list, bill of lading and customs declaration are already available as JSON; a pre-filing check of invoice no, contract no, packages, gross/net weight, amount, currency, HS code and origin country; confirming that all 12 declaration header elements were filled.
 - **Does not fit:** PDFs, scans, images or Excel as direct input (no OCR here; prepare JSON first); line-item SKU/quantity/unit-price matching; classification rulings, origin rules, customs value or licence decisions; replacing a broker, customs authority or lawyer; multiple shipments in one file.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check structure: a tall import-set.json card on the left lists the four documents with their field coverage (invoice 9/9, packing list 5/9, bill of lading 5/9, customs declaration 9/9; read-only, up to 5 MB) and fans out over one bus into two channels that never mix. A is the consistency scoreboard: normalise first (uppercase, collapse or remove spaces, remove commas, strip dots and hyphens from the HS code, 0.001 kg and 0.01 half-up), then each of the nine fields lands in exactly one of four states; the fixture gives 8 consistent and 1 mismatch (gross weight 2450.50 on the declaration against 2450.00 three times), so pass=false and strict would raise E_IMPORT_FIELD_MISMATCH. B is the declaration's twelve-slot element strip: 11 present, port of loading missing, complete=false, and this never changes pass. Only A reaches import.export, which writes the nine-row CSV plus sha256 under $DSH_HOME/dsh-import-customs-check/exports/">
+</picture>
 
 ## Three-step setup
 
@@ -344,7 +349,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-Current version `0.1.0`; 58 tests pass (`node --test test/*.test.mjs`). Release gate: `node scripts/gate.mjs` (metadata lint + every public acceptance row passing + all three stable error codes exercised). The hero pipeline diagram is generated programmatically by [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (Python standard library, pure SVG, command-token labels, light/dark pair) and is safe to re-run; `docs/assets/quickstart.png` is a real captured screenshot, kept together with `docs/assets/quickstart.log`.
+Current version `0.1.0`; 58 tests pass (`node --test test/*.test.mjs`). Release gate: `node scripts/gate.mjs` (metadata lint + every public acceptance row passing + all three stable error codes exercised). The README images are generated programmatically by [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): the hero banners with Pillow (zh / en × light / dark, four files) and the structure diagram as hand-written SVG (light and dark); safe to re-run with `python scripts/gen-readme-assets.py`. The older single-skin flow diagram stays in `docs/assets/` for external deep links, while the READMEs reference only the new hero set and the flow-v5 pair. `docs/assets/quickstart.png` is a real captured screenshot, kept together with `docs/assets/quickstart.log`.
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 

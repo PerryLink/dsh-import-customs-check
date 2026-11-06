@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-light.svg" width="100%" alt="Flujo de dsh-import-customs-check: import-set.json (invoice / packing_list / bill_of_lading / customs_declaration) → import.check (9 campos) e import.elements (12 elementos) → import.export (CSV) → $DSH_HOME/dsh-import-customs-check/exports/; todo local, el JSON de origen es de solo lectura">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-hero-en-dark.webp">
+  <img src="docs/assets/dsh-import-customs-check-hero-en-light.webp" width="100%" alt="dsh-import-customs-check: a la izquierda el nombre del plugin y dos líneas de valor; a la derecha los cuatro documentos de importación (factura 9/9, lista de empaque 5/9, conocimiento de embarque 5/9, declaración de aduana 9/9) alimentan la comparación de 9 campos: el peso bruto es 2450.50 en la declaración y 2450.00 en los otros tres; debajo, 11 de los 12 elementos de la declaración están presentes y falta el puerto de carga; cierra la tarjeta la línea de exportación CSV">
 </picture>
 
 # dsh-import-customs-check
@@ -38,6 +38,11 @@ En una frase: lee el JSON de cuatro documentos de un envío de importación (fac
 
 - **Encaja:** un envío de importación cuyos cuatro documentos ya están en JSON; una comprobación previa a la presentación de número de factura, número de contrato, bultos, peso bruto/neto, importe, moneda, código HS y país de origen; confirmar que los 12 elementos de cabecera de la declaración están completos.
 - **No encaja:** PDF, escaneos, imágenes o Excel como entrada directa (aquí no hay OCR; prepara primero el JSON); conciliación de líneas por SKU/cantidad/precio unitario; dictámenes de clasificación, reglas de origen, valor en aduana o decisiones de licencias; sustituir a un agente de aduanas, a la autoridad aduanera o a un abogado; varios envíos en un mismo archivo.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="Estructura de dsh-import-customs-check: a la izquierda una tarjeta alta de import-set.json con los cuatro documentos y su cobertura (factura 9/9, lista de empaque 5/9, conocimiento de embarque 5/9, declaración 9/9; solo lectura, hasta 5 MB), que se reparte por un bus en dos canales que nunca se mezclan. A es el marcador de consistencia: primero normaliza (mayúsculas, espacios, comas, HS sin puntos ni guiones, 0,001 kg y 0,01 half-up) y cada uno de los 9 campos cae en uno de cuatro estados; el ejemplo da 8 consistentes y 1 discrepancia (peso bruto 2450.50 en la declaración frente a 2450.00 tres veces), así que pass=false y strict lanzaría E_IMPORT_FIELD_MISMATCH. B es la tira de 12 casillas de la declaración: 11 presentes, falta el puerto de carga, complete=false, y esto nunca cambia pass. Solo A llega a import.export, que escribe el CSV de 9 filas y el sha256 en $DSH_HOME/dsh-import-customs-check/exports/">
+</picture>
 
 ## Instalación en tres pasos
 
@@ -338,7 +343,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-Versión actual `0.1.0`; 58 pruebas pasan (`node --test test/*.test.mjs`). Puerta de publicación: `node scripts/gate.mjs` (lint de metadatos + todas las filas públicas de aceptación + los tres códigos de error estables ejercitados). El diagrama de cabecera se genera mediante [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) (biblioteca estándar de Python, SVG puro, etiquetas con tokens de comando, par claro/oscuro) y se puede volver a ejecutar; `docs/assets/quickstart.png` es una captura real, conservada junto con `docs/assets/quickstart.log`.
+Versión actual `0.1.0`; 58 pruebas pasan (`node --test test/*.test.mjs`). Puerta de publicación: `node scripts/gate.mjs` (lint de metadatos + todas las filas públicas de aceptación + los tres códigos de error estables ejercitados). Las imágenes del README se generan con [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): las bandas hero con Pillow (zh / en × claro / oscuro, cuatro archivos) y el diagrama de estructura como SVG escrito a mano (claro y oscuro), y se pueden volver a ejecutar con `python scripts/gen-readme-assets.py`; el diagrama de flujo de una sola piel se conserva en `docs/assets/` para enlaces externos, mientras que los README solo referencian el nuevo juego de hero y el par flow-v5. `docs/assets/quickstart.png` es una captura real, conservada junto con `docs/assets/quickstart.log`.
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 

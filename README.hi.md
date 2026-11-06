@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-light.svg" width="100%" alt="dsh-import-customs-check डेटा फ़्लो: import-set.json (invoice / packing_list / bill_of_lading / customs_declaration) → import.check (9 फ़ील्ड) और import.elements (12 तत्व) → import.export (CSV) → $DSH_HOME/dsh-import-customs-check/exports/; पूरी तरह लोकल, स्रोत JSON केवल पढ़ने योग्य">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-hero-en-dark.webp">
+  <img src="docs/assets/dsh-import-customs-check-hero-en-light.webp" width="100%" alt="dsh-import-customs-check: बाईं ओर प्लगइन का नाम और दो मूल्य-पंक्तियाँ; दाईं ओर चार आयात दस्तावेज़ (इनवॉइस 9/9, पैकिंग लिस्ट 5/9, बिल ऑफ़ लेडिंग 5/9, कस्टम्स डिक्लेरेशन 9/9) 9 फ़ील्ड की तुलना में जाते हैं — सकल वज़न डिक्लेरेशन पर 2450.50 और बाकी तीन पर 2450.00 है; नीचे डिक्लेरेशन के 12 में से 11 तत्व मौजूद हैं और पोर्ट ऑफ़ लोडिंग छूटा है; अंत में CSV निर्यात पंक्ति">
 </picture>
 
 # dsh-import-customs-check
@@ -38,6 +38,11 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 - **उपयुक्त:** एक आयात शिपमेंट जिसके चारों दस्तावेज़ पहले से JSON में हैं; फ़ाइलिंग से पहले इनवॉइस नंबर, कॉन्ट्रैक्ट नंबर, पैकेज, सकल/शुद्ध वज़न, राशि, मुद्रा, HS कोड और मूल देश की जाँच; डिक्लेरेशन के 12 हेडर तत्व भरे हैं या नहीं, इसकी पुष्टि।
 - **अनुपयुक्त:** PDF, स्कैन, चित्र या Excel सीधे इनपुट के रूप में (यहाँ OCR नहीं है; पहले JSON तैयार करें); लाइन-आइटम SKU/मात्रा/इकाई-मूल्य मिलान; वर्गीकरण निर्णय, मूल नियम, सीमा शुल्क मूल्य या लाइसेंस निर्णय; ब्रोकर, सीमा शुल्क प्राधिकरण या वकील का विकल्प; एक फ़ाइल में कई शिपमेंट।
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check की संरचना: बाईं ओर ऊँचा import-set.json कार्ड चारों दस्तावेज़ों और उनकी फ़ील्ड कवरेज के साथ (इनवॉइस 9/9, पैकिंग लिस्ट 5/9, बिल ऑफ़ लेडिंग 5/9, कस्टम्स डिक्लेरेशन 9/9; केवल पढ़ने योग्य, 5 MB तक), जो एक बस से दो ऐसे चैनलों में बँटता है जो कभी नहीं मिलते। A स्थिरता का स्कोरबोर्ड है: पहले सामान्यीकरण (अपरकेस, स्पेस, कॉमा, HS से बिंदु/हाइफ़न हटाना, 0.001 kg और 0.01 half-up), फिर 9 में से हर फ़ील्ड चार में से एक स्थिति में जाता है; नमूने में 8 consistent और 1 mismatch है (डिक्लेरेशन पर सकल वज़न 2450.50, बाकी तीन पर 2450.00), इसलिए pass=false और strict E_IMPORT_FIELD_MISMATCH देगा। B डिक्लेरेशन की 12-खाने की पट्टी है: 11 मौजूद, पोर्ट ऑफ़ लोडिंग छूटा, complete=false, और यह pass को कभी नहीं बदलता। केवल A import.export तक पहुँचता है, जो 9 पंक्तियों की CSV और sha256 $DSH_HOME/dsh-import-customs-check/exports/ में लिखता है">
+</picture>
 
 ## तीन चरणों में शुरुआत
 
@@ -338,7 +343,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-वर्तमान संस्करण `0.1.0`; 58 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। हीरो डायग्राम [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनता है (Python मानक लाइब्रेरी, शुद्ध SVG, कमांड-टोकन लेबल, हल्का/गहरा जोड़ा) और दोबारा चलाया जा सकता है; `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
+वर्तमान संस्करण `0.1.0`; 58 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। README की छवियाँ [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनती हैं: hero बैनर Pillow से (zh / en × हल्का / गहरा, चार फ़ाइलें) और संरचना-चित्र हाथ से लिखे SVG के रूप में (हल्का और गहरा), जिन्हें `python scripts/gen-readme-assets.py` से दोबारा चलाया जा सकता है; पुराना एक-रूप फ़्लो चित्र बाहरी लिंक के लिए `docs/assets/` में रहता है, जबकि README केवल नए hero सेट और flow-v5 जोड़े का संदर्भ देते हैं। `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 
