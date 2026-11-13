@@ -13,7 +13,7 @@ const IMPORT_HUMAN: Record<ImportCustomsErrorCode, HumanMessage> = {
   },
   E_IMPORT_FIELD_MISMATCH: {
     text: '单证之间的字段对不上（strict 模式下才会中断）',
-    next: '先看 import.check 的逐字段表，改单后再用 strict=true 复跑',
+    next: '先看 import_check 的逐字段表，改单后再用 strict=true 复跑',
   },
   E_IMPORT_PATH_INVALID: {
     text: '单证集路径或导出文件名不可用',

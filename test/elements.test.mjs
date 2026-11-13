@@ -60,14 +60,14 @@ test('empty and non-string element values are missing', () => {
   )
 })
 
-test('import.elements reads a document set and returns the missing list', async (t) => {
+test('import_elements reads a document set and returns the missing list', async (t) => {
   const dir = await makeTemp(t)
   const file = await writeSet(dir, 'complete.json', documentSet({ customs_declaration: { port_of_loading: '上海港' } }))
   const tools = toolMap(path.join(dir, 'store'))
-  const result = await tools['import.elements'].execute({ path: file }, exec)
+  const result = await tools['import_elements'].execute({ path: file }, exec)
   assert.equal(result.complete, true)
   assert.equal(result.present, 12)
-  const sampleResult = await tools['import.elements'].execute({ path: sample }, exec)
+  const sampleResult = await tools['import_elements'].execute({ path: sample }, exec)
   assert.equal(sampleResult.present, 11)
   assert.deepEqual(sampleResult.missing, [{ key: 'port_of_loading', label: '装货港' }])
 })

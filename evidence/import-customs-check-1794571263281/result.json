@@ -1,0 +1,80 @@
+{
+  "run_id": "import-customs-check-1794571263281",
+  "scope": "IMPORT-CUSTOMS-CHECK-S1",
+  "status": "pass",
+  "counted": false,
+  "note": "synthetic import document set only; no real shipment or customer data",
+  "metrics": [
+    {
+      "req_id": "IMP-A01",
+      "metric": "field check",
+      "threshold": "fields=9 consistent=8 mismatch=1 pass=false",
+      "actual": "fields=9 consistent=8 mismatch=1 pass=false",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A02",
+      "metric": "HS normalization",
+      "threshold": "2 sources normalize to 84713000",
+      "actual": "sources=2 unique=1",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A03",
+      "metric": "gross weight mismatch",
+      "threshold": "4 sources with declaration 2450.50",
+      "actual": "sources=4 declared=2450.50",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A04",
+      "metric": "strict mode",
+      "threshold": "E_IMPORT_FIELD_MISMATCH",
+      "actual": "E_IMPORT_FIELD_MISMATCH",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A05",
+      "metric": "12 elements",
+      "threshold": "present=11 missing=1",
+      "actual": "present=11 missing=port_of_loading",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A06",
+      "metric": "complete elements",
+      "threshold": "12/12",
+      "actual": "12/12",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A07",
+      "metric": "check CSV",
+      "threshold": "rows=9 sha ok",
+      "actual": "rows=9 sha=ok",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A08",
+      "metric": "missing document",
+      "threshold": "E_IMPORT_DOC_MISSING",
+      "actual": "E_IMPORT_DOC_MISSING",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A09",
+      "metric": "export path safety",
+      "threshold": "traversal rejected",
+      "actual": "E_IMPORT_PATH_INVALID",
+      "pass": true
+    },
+    {
+      "req_id": "IMP-A10",
+      "metric": "document coverage",
+      "threshold": "fields=9/5/5/9",
+      "actual": "fields=9/5/5/9",
+      "pass": true
+    }
+  ],
+  "pass": true
+}

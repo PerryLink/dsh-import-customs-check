@@ -41,7 +41,7 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check की संरचना: बाईं ओर ऊँचा import-set.json कार्ड चारों दस्तावेज़ों और उनकी फ़ील्ड कवरेज के साथ (इनवॉइस 9/9, पैकिंग लिस्ट 5/9, बिल ऑफ़ लेडिंग 5/9, कस्टम्स डिक्लेरेशन 9/9; केवल पढ़ने योग्य, 5 MB तक), जो एक बस से दो ऐसे चैनलों में बँटता है जो कभी नहीं मिलते। A स्थिरता का स्कोरबोर्ड है: पहले सामान्यीकरण (अपरकेस, स्पेस, कॉमा, HS से बिंदु/हाइफ़न हटाना, 0.001 kg और 0.01 half-up), फिर 9 में से हर फ़ील्ड चार में से एक स्थिति में जाता है; नमूने में 8 consistent और 1 mismatch है (डिक्लेरेशन पर सकल वज़न 2450.50, बाकी तीन पर 2450.00), इसलिए pass=false और strict E_IMPORT_FIELD_MISMATCH देगा। B डिक्लेरेशन की 12-खाने की पट्टी है: 11 मौजूद, पोर्ट ऑफ़ लोडिंग छूटा, complete=false, और यह pass को कभी नहीं बदलता। केवल A import.export तक पहुँचता है, जो 9 पंक्तियों की CSV और sha256 $DSH_HOME/dsh-import-customs-check/exports/ में लिखता है">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check की संरचना: बाईं ओर ऊँचा import-set.json कार्ड चारों दस्तावेज़ों और उनकी फ़ील्ड कवरेज के साथ (इनवॉइस 9/9, पैकिंग लिस्ट 5/9, बिल ऑफ़ लेडिंग 5/9, कस्टम्स डिक्लेरेशन 9/9; केवल पढ़ने योग्य, 5 MB तक), जो एक बस से दो ऐसे चैनलों में बँटता है जो कभी नहीं मिलते। A स्थिरता का स्कोरबोर्ड है: पहले सामान्यीकरण (अपरकेस, स्पेस, कॉमा, HS से बिंदु/हाइफ़न हटाना, 0.001 kg और 0.01 half-up), फिर 9 में से हर फ़ील्ड चार में से एक स्थिति में जाता है; नमूने में 8 consistent और 1 mismatch है (डिक्लेरेशन पर सकल वज़न 2450.50, बाकी तीन पर 2450.00), इसलिए pass=false और strict E_IMPORT_FIELD_MISMATCH देगा। B डिक्लेरेशन की 12-खाने की पट्टी है: 11 मौजूद, पोर्ट ऑफ़ लोडिंग छूटा, complete=false, और यह pass को कभी नहीं बदलता। केवल A import_export तक पहुँचता है, जो 9 पंक्तियों की CSV और sha256 $DSH_HOME/dsh-import-customs-check/exports/ में लिखता है">
 </picture>
 
 ## तीन चरणों में शुरुआत
@@ -80,13 +80,13 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 | टूल | उद्देश्य | जोखिम |
 |---|---|---|
-| `import.check` | चारों दस्तावेज़ों में 9 हेडर फ़ील्ड का मिलान; `strict=true` पर अंतर होने से त्रुटि | R0 |
-| `import.elements` | डिक्लेरेशन के 12 अनिवार्य हेडर तत्व जाँचकर छूटे तत्वों की सूची | R0 |
-| `import.export` | फ़ील्ड-जाँच तालिका को CSV में लिखकर पथ + sha256 देता है | R1 स्थानीय लेखन |
+| `import_check` | चारों दस्तावेज़ों में 9 हेडर फ़ील्ड का मिलान; `strict=true` पर अंतर होने से त्रुटि | R0 |
+| `import_elements` | डिक्लेरेशन के 12 अनिवार्य हेडर तत्व जाँचकर छूटे तत्वों की सूची | R0 |
+| `import_export` | फ़ील्ड-जाँच तालिका को CSV में लिखकर पथ + sha256 देता है | R1 स्थानीय लेखन |
 
 - **प्रति-फ़ील्ड चार स्थितियाँ** — `consistent` / `mismatch` / `single_source` / `not_provided`; `summary` गिनती रखता है और `pass = mismatch === 0`, इसलिए केवल एक दस्तावेज़ वाला फ़ील्ड कभी अंतर नहीं समझा जाता।
 - **सख्त गेट** — `strict: true` के साथ कोई भी `mismatch` `E_IMPORT_FIELD_MISMATCH` फेंकता है, ऑटोमेशन के लिए तैयार; डिफ़ॉल्ट मोड केवल रिपोर्ट करता है।
-- **12 तत्वों की पूर्णता** — `import.elements` डिक्लेरेशन हेडर अलग जाँचता है और `{ complete, total, present, missing }` देता है; हर छूटे तत्व के साथ `key` और चीनी लेबल।
+- **12 तत्वों की पूर्णता** — `import_elements` डिक्लेरेशन हेडर अलग जाँचता है और `{ complete, total, present, missing }` देता है; हर छूटे तत्व के साथ `key` और चीनी लेबल।
 - **निश्चित सामान्यीकरण** — इनवॉइस/कॉन्ट्रैक्ट/मूल देश अपरकेस और रिक्त स्थान संकुचित, HS कोड से बिंदु/स्पेस/हाइफ़न हटाए जाते हैं, वज़न 0.001 kg और राशि 0.01 half-up; `CN` ↔ `China` जैसा अर्थ-आधारित मैपिंग नहीं।
 - **केवल लोकल, केवल पढ़ने योग्य** — बताई गई JSON पढ़ता है, केवल `$DSH_HOME/dsh-import-customs-check/exports/` में लिखता है; नेटवर्क नहीं, मॉडल कॉल नहीं, अपलोड नहीं, स्रोत फ़ाइल कभी नहीं बदलती।
 - **त्रुटि के साथ अगला कदम** — हर त्रुटि `<एक वाक्य>（E_IMPORT_XXX）｜下一步：<एक क्रिया>` है; «त्रुटि कोड» देखें।
@@ -128,9 +128,9 @@ gross_weight_kg / 毛重
 
 ## आउटपुट
 
-- `import.check`: फ़ील्ड-दर-फ़ील्ड तालिका। हर फ़ील्ड में `status`, `compared` (कितने दस्तावेज़ों ने दिया), `values` (प्रति दस्तावेज़ कच्चा मान, सामान्यीकृत मान और अमान्य ध्वज) और `note`। `summary` में `consistent / mismatch / single_source / not_provided` की गिनती, और `pass = mismatch === 0`।
-- `import.elements`: डिक्लेरेशन के 12 हेडर तत्वों की पूर्णता `{ complete, total, present, missing: [{ key, label }] }` के रूप में।
-- `import.export`: फ़ील्ड तालिका `$DSH_HOME/dsh-import-customs-check/exports/` में लिखता है, प्रति फ़ील्ड एक पंक्ति और प्रति दस्तावेज़ एक कॉलम; पथ, `sha256`, बाइट्स और पंक्तियाँ लौटाता है।
+- `import_check`: फ़ील्ड-दर-फ़ील्ड तालिका। हर फ़ील्ड में `status`, `compared` (कितने दस्तावेज़ों ने दिया), `values` (प्रति दस्तावेज़ कच्चा मान, सामान्यीकृत मान और अमान्य ध्वज) और `note`। `summary` में `consistent / mismatch / single_source / not_provided` की गिनती, और `pass = mismatch === 0`।
+- `import_elements`: डिक्लेरेशन के 12 हेडर तत्वों की पूर्णता `{ complete, total, present, missing: [{ key, label }] }` के रूप में।
+- `import_export`: फ़ील्ड तालिका `$DSH_HOME/dsh-import-customs-check/exports/` में लिखता है, प्रति फ़ील्ड एक पंक्ति और प्रति दस्तावेज़ एक कॉलम; पथ, `sha256`, बाइट्स और पंक्तियाँ लौटाता है।
 
 | status | अर्थ | विफलता मानी जाती है? |
 |---|---|---|
@@ -139,7 +139,7 @@ gross_weight_kg / 毛重
 | `single_source` | केवल 1 दस्तावेज़ यह फ़ील्ड देता है, इसलिए मिलान संभव नहीं | नहीं |
 | `not_provided` | चारों दस्तावेज़ों में यह फ़ील्ड नहीं है | नहीं |
 
-`import.check` डिफ़ॉल्ट रूप से पूरी तालिका देता है। `strict: true` के साथ कोई भी `mismatch` `E_IMPORT_FIELD_MISMATCH` फेंकता है, जो स्वचालित गेट के लिए उपयुक्त है।
+`import_check` डिफ़ॉल्ट रूप से पूरी तालिका देता है। `strict: true` के साथ कोई भी `mismatch` `E_IMPORT_FIELD_MISMATCH` फेंकता है, जो स्वचालित गेट के लिए उपयुक्त है।
 
 ## उदाहरण
 
@@ -165,26 +165,26 @@ node samples/quickstart/run.mjs --check
 
 | टूल | पैरामीटर | अनिवार्य | अर्थ |
 |---|---|---|---|
-| `import.check` | `path` | हाँ | एक-शिपमेंट import-set JSON का पूर्ण पथ |
-| `import.check` | `strict` | नहीं | `true` पर कोई भी `mismatch` `E_IMPORT_FIELD_MISMATCH` फेंकता है; डिफ़ॉल्ट `false` |
-| `import.elements` | `path` | हाँ | ऊपर जैसा |
-| `import.export` | `path` | हाँ | ऊपर जैसा |
-| `import.export` | `filename` | नहीं | निर्यात फ़ाइल नाम, केवल `[A-Za-z0-9._-]`; डिफ़ॉल्ट `import-check-<input_sha256 के पहले 12 अक्षर>.csv` |
+| `import_check` | `path` | हाँ | एक-शिपमेंट import-set JSON का पूर्ण पथ |
+| `import_check` | `strict` | नहीं | `true` पर कोई भी `mismatch` `E_IMPORT_FIELD_MISMATCH` फेंकता है; डिफ़ॉल्ट `false` |
+| `import_elements` | `path` | हाँ | ऊपर जैसा |
+| `import_export` | `path` | हाँ | ऊपर जैसा |
+| `import_export` | `filename` | नहीं | निर्यात फ़ाइल नाम, केवल `[A-Za-z0-9._-]`; डिफ़ॉल्ट `import-check-<input_sha256 के पहले 12 अक्षर>.csv` |
 
 कॉल उदाहरण (टूल सतह):
 
 ```sh
 # 1) फ़ील्ड-दर-फ़ील्ड स्थिरता
-#    टूल सतह: import.check({ path: "/abs/path/import-set.json" })
+#    टूल सतह: import_check({ path: "/abs/path/import-set.json" })
 
 # 2) सख्त गेट (अंतर पर विफल)
-#    टूल सतह: import.check({ path: "/abs/path/import-set.json", strict: true })
+#    टूल सतह: import_check({ path: "/abs/path/import-set.json", strict: true })
 
 # 3) डिक्लेरेशन तत्व
-#    टूल सतह: import.elements({ path: "/abs/path/import-set.json" })
+#    टूल सतह: import_elements({ path: "/abs/path/import-set.json" })
 
 # 4) जाँच तालिका निर्यात
-#    टूल सतह: import.export({ path: "/abs/path/import-set.json" })
+#    टूल सतह: import_export({ path: "/abs/path/import-set.json" })
 ```
 
 परीक्षण `DSH_IMPORT_CUSTOMS_CHECK_HOME` पर्यावरण चर से स्थानीय लेखन रूट बदल सकते हैं; डिफ़ॉल्ट ठीक `$DSH_HOME/dsh-import-customs-check` है।
@@ -227,7 +227,7 @@ node samples/quickstart/run.mjs --check
 <details>
 <summary>कोई दस्तावेज़ छूट जाए तो क्या होता है?</summary>
 
-`import.check` और `import.elements` दोनों `E_IMPORT_DOC_MISSING` फेंकते हैं और विवरण बताता है क्या छूटा (जैसे «छूटा: बिल ऑफ़ लेडिंग»)। पैकेज तीन से चौथा दस्तावेज़ नहीं अनुमान लगाता; उसे जोड़कर फिर चलाएँ। यदि कोई दस्तावेज़ वास्तव में लागू नहीं होता, तो व्यावसायिक प्रक्रिया में पुष्टि करें, कुंजी न हटाएँ।
+`import_check` और `import_elements` दोनों `E_IMPORT_DOC_MISSING` फेंकते हैं और विवरण बताता है क्या छूटा (जैसे «छूटा: बिल ऑफ़ लेडिंग»)। पैकेज तीन से चौथा दस्तावेज़ नहीं अनुमान लगाता; उसे जोड़कर फिर चलाएँ। यदि कोई दस्तावेज़ वास्तव में लागू नहीं होता, तो व्यावसायिक प्रक्रिया में पुष्टि करें, कुंजी न हटाएँ।
 
 </details>
 
@@ -241,7 +241,7 @@ node samples/quickstart/run.mjs --check
 <details>
 <summary>`port_of_loading` छूटा होना `mismatch` क्यों नहीं है?</summary>
 
-12 तत्वों की पूर्णता अलग टूल (`import.elements`) जाँचता है और नौ स्थिरता फ़ील्ड में नहीं मिलाया जाता। तत्व छूटने पर `complete=false` होता है और `missing` सूची देती है; इससे `import.check` का `pass` नहीं बदलता।
+12 तत्वों की पूर्णता अलग टूल (`import_elements`) जाँचता है और नौ स्थिरता फ़ील्ड में नहीं मिलाया जाता। तत्व छूटने पर `complete=false` होता है और `missing` सूची देती है; इससे `import_check` का `pass` नहीं बदलता।
 
 </details>
 
@@ -273,14 +273,14 @@ node samples/quickstart/run.mjs --check
 नेटवर्क: नहीं।
 बाहरी सिस्टम: कोई नहीं।
 
-`import.check` और `import.elements` **R0** (केवल पढ़ना) हैं। `import.export` **R1** (स्थानीय लेखन, `$DSH_HOME/dsh-import-customs-check/exports/` में) है। परीक्षण `DSH_IMPORT_CUSTOMS_CHECK_HOME` से स्थानीय लेखन रूट बदल सकते हैं; डिफ़ॉल्ट ठीक `$DSH_HOME/dsh-import-customs-check` है।
+`import_check` और `import_elements` **R0** (केवल पढ़ना) हैं। `import_export` **R1** (स्थानीय लेखन, `$DSH_HOME/dsh-import-customs-check/exports/` में) है। परीक्षण `DSH_IMPORT_CUSTOMS_CHECK_HOME` से स्थानीय लेखन रूट बदल सकते हैं; डिफ़ॉल्ट ठीक `$DSH_HOME/dsh-import-customs-check` है।
 
 ## त्रुटि कोड
 
 | कोड | कब | अगला कदम |
 |---|---|---|
 | `E_IMPORT_DOC_MISSING` | चार में से एक दस्तावेज़ छूटा, JSON खराब है, दस्तावेज़ ऑब्जेक्ट नहीं है, दोहराव है, या फ़ाइल खाली/5 MB से बड़ी है | चारों दस्तावेज़ दें और JSON की संरचना जाँचें |
-| `E_IMPORT_FIELD_MISMATCH` | `strict: true` और कम से कम एक फ़ील्ड `mismatch` है | `import.check` तालिका देखें, दस्तावेज़ सुधारें, फिर चलाएँ |
+| `E_IMPORT_FIELD_MISMATCH` | `strict: true` और कम से कम एक फ़ील्ड `mismatch` है | `import_check` तालिका देखें, दस्तावेज़ सुधारें, फिर चलाएँ |
 | `E_IMPORT_PATH_INVALID` | इनपुट पथ नहीं है / डायरेक्टरी है / पढ़ा नहीं जा सकता, निर्यात डायरेक्टरी लिखने योग्य नहीं, या निर्यात फ़ाइल नाम असुरक्षित है | मौजूद JSON दें; निर्यात में केवल `[A-Za-z0-9._-]` दें |
 
 संदेश का प्रारूप `<एक वाक्य>（E_IMPORT_XXX）｜下一步：<एक क्रिया>` है। अधिक जानकारी [TROUBLESHOOTING.md](TROUBLESHOOTING.md) में।
@@ -324,7 +324,7 @@ node samples/quickstart/run.mjs --check
 
 ## पारिस्थितिकी और गुणवत्ता
 
-- [npm पैकेज](https://www.npmjs.com/package/dsh-import-customs-check) (`0.1.0` प्रकाशित, README और tarball के साथ)
+- [npm पैकेज](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.0` प्रकाशित, README और tarball के साथ)
 - [डोमेन इंडेक्स](https://perrylink.github.io/dsh-plugins/) (PerryLink प्लगइन कैटलॉग, इसमें यह प्लगइन भी है)
 - [CI वर्कफ़्लो](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml) (`ci.yml` का वास्तविक रन इतिहास)
 
@@ -343,7 +343,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-वर्तमान संस्करण `0.1.0`; 58 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। README की छवियाँ [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनती हैं: hero बैनर Pillow से (zh / en × हल्का / गहरा, चार फ़ाइलें) और संरचना-चित्र हाथ से लिखे SVG के रूप में (हल्का और गहरा), जिन्हें `python scripts/gen-readme-assets.py` से दोबारा चलाया जा सकता है; पुराना एक-रूप फ़्लो चित्र बाहरी लिंक के लिए `docs/assets/` में रहता है, जबकि README केवल नए hero सेट और flow-v5 जोड़े का संदर्भ देते हैं। `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
+वर्तमान संस्करण `0.2.0`; 59 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। README की छवियाँ [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनती हैं: hero बैनर Pillow से (zh / en × हल्का / गहरा, चार फ़ाइलें) और संरचना-चित्र हाथ से लिखे SVG के रूप में (हल्का और गहरा), जिन्हें `python scripts/gen-readme-assets.py` से दोबारा चलाया जा सकता है; पुराना एक-रूप फ़्लो चित्र बाहरी लिंक के लिए `docs/assets/` में रहता है, जबकि README केवल नए hero सेट और flow-v5 जोड़े का संदर्भ देते हैं। `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 

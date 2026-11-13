@@ -1,6 +1,6 @@
 {
   "name": "dsh-import-customs-check",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cross-check import documents (invoice, packing list, bill of lading, customs declaration) for field consistency and 12 declaration elements; local JSON only.",
   "type": "module",
   "main": "./lib/plugin/index.js",

@@ -24,7 +24,7 @@ async function load(sourcePath: string) {
 
 export function createTools(deps: ToolDeps) {
   const check = defineTool({
-    name: 'import.check',
+    name: 'import_check',
     description:
       'Cross-check 9 header fields (invoice_no, contract_no, packages, gross_weight_kg, net_weight_kg, amount, currency, hs_code, origin_country) across a local JSON document set containing invoice, packing_list, bill_of_lading and customs_declaration. Returns a per-field consistent/mismatch table; strict=true raises E_IMPORT_FIELD_MISMATCH. Read-only.',
     parameters: {
@@ -122,7 +122,7 @@ export function createTools(deps: ToolDeps) {
   })
 
   const elements = defineTool({
-    name: 'import.elements',
+    name: 'import_elements',
     description:
       'Check the customs declaration in a local JSON document set for the 12 mandatory header elements and return the missing ones. Read-only.',
     parameters: { path: { type: 'string', required: true } },
@@ -160,7 +160,7 @@ export function createTools(deps: ToolDeps) {
   })
 
   const exportTool = defineTool({
-    name: 'import.export',
+    name: 'import_export',
     description:
       'Write the nine-field consistency table as CSV under $DSH_HOME/dsh-import-customs-check/exports, one row per field and one column per document; returns path, sha256, bytes and rows.',
     parameters: {

@@ -46,18 +46,18 @@ async function main() {
     const missingFile = path.join(tempDir, 'missing.json')
     writeFileSync(missingFile, `${JSON.stringify(missing, null, 2)}\n`)
 
-    const check = await tools['import.check'].execute({ path: sample }, exec)
-    const elements = await tools['import.elements'].execute({ path: sample }, exec)
-    const completeElements = await tools['import.elements'].execute({ path: completeFile }, exec)
-    const exported = await tools['import.export'].execute({ path: sample, filename: 'acceptance.csv' }, exec)
+    const check = await tools['import_check'].execute({ path: sample }, exec)
+    const elements = await tools['import_elements'].execute({ path: sample }, exec)
+    const completeElements = await tools['import_elements'].execute({ path: completeFile }, exec)
+    const exported = await tools['import_export'].execute({ path: sample, filename: 'acceptance.csv' }, exec)
     const csvText = readFileSync(exported.path, 'utf8')
 
     const hs = check.fields.find((field) => field.field === 'hs_code')
     const gross = check.fields.find((field) => field.field === 'gross_weight_kg')
     const docCounts = check.documents.map((document) => document.field_count).join('/')
-    const strictCode = await errorCode(tools['import.check'].execute({ path: sample, strict: true }, exec))
-    const missingCode = await errorCode(tools['import.check'].execute({ path: missingFile }, exec))
-    const pathCode = await errorCode(tools['import.export'].execute({ path: sample, filename: '../evil.csv' }, exec))
+    const strictCode = await errorCode(tools['import_check'].execute({ path: sample, strict: true }, exec))
+    const missingCode = await errorCode(tools['import_check'].execute({ path: missingFile }, exec))
+    const pathCode = await errorCode(tools['import_export'].execute({ path: sample, filename: '../evil.csv' }, exec))
 
     // ACCEPTANCE.csv uses a simple comma-split schema: keep every field free of commas.
     const metrics = [
