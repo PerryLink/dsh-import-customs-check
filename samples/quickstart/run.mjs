@@ -30,9 +30,9 @@ async function run() {
     const tools = Object.fromEntries(createTools({ baseDir: tempDir }).map((tool) => [tool.name, tool]))
     const exec = { callId: 'quickstart' }
 
-    const check = await tools['import.check'].execute({ path: samplePath }, exec)
-    const elements = await tools['import.elements'].execute({ path: samplePath }, exec)
-    const exported = await tools['import.export'].execute({ path: samplePath }, exec)
+    const check = await tools['import_check'].execute({ path: samplePath }, exec)
+    const elements = await tools['import_elements'].execute({ path: samplePath }, exec)
+    const exported = await tools['import_export'].execute({ path: samplePath }, exec)
     const csvText = await readFile(exported.path, 'utf8')
 
     return {

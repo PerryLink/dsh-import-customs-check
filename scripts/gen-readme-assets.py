@@ -18,7 +18,7 @@ Everything drawn here is derived from this repository, not from a template:
       A, the nine-field consistency scoreboard (three states per field,
       normalisation band above it, summary / pass / strict gate at the
       right), and B, the twelve-slot declaration element strip. Only
-      channel A reaches import.export; channel B never writes CSV and a
+      channel A reaches import_export; channel B never writes CSV and a
       missing element never flips `pass`.
 
 Concrete values come from samples/quickstart:
@@ -242,7 +242,7 @@ HERO = {
         elems_result="11/12 · 缺 装货港",
         complete="complete = false",
         missing="missing[0] = port_of_loading",
-        csv="import.export → CSV · 9 行 · sha256",
+        csv="import_export → CSV · 9 行 · sha256",
         path="exports/import-check-ca764bab6159.csv",
     ),
     "en": dict(
@@ -266,7 +266,7 @@ HERO = {
         elems_result="11/12 · missing port_of_loading",
         complete="complete = false",
         missing="missing[0] = port_of_loading",
-        csv="import.export → CSV · 9 rows · sha256",
+        csv="import_export → CSV · 9 rows · sha256",
         path="exports/import-check-ca764bab6159.csv",
     ),
 }
@@ -505,7 +505,7 @@ class V:
             'raise E_IMPORT_FIELD_MISMATCH. Channel B is the declaration twelve-'
             'slot element strip: 11 present, port_of_loading missing, '
             'complete=false, and this never changes pass. Only channel A reaches '
-            'import.export, which writes 9 CSV rows with a sha256 under '
+            'import_export, which writes 9 CSV rows with a sha256 under '
             '$DSH_HOME/dsh-import-customs-check/exports/.</desc>',
             '<defs>',
             f'<linearGradient id="bg" x1="0" y1="0" x2="0.25" y2="1">'
@@ -691,7 +691,7 @@ def flow(skin: str) -> str:
     ax, ay, aw, ah = 286, 106, 506, 334
     v.rect(ax, ay, aw, ah, r=20, fill=s["card"], stroke=edge, shadow=True)
     v.text(ax + 20, ay + 28, "A · 一致性对照", 15.5, fill=text, weight=700)
-    v.text(ax + 140, ay + 28, "import.check", 12.5, fill=acc,
+    v.text(ax + 140, ay + 28, "import_check", 12.5, fill=acc,
            weight=700, mono=True)
     v.chip_r(ax + aw - 16, ay + 14, "R0 只读", 10.2, fg=acc, bg=pill)
     v.text(ax + 20, ay + 50, "9 个表头字段 × 4 份单证 · 规范化后逐字段判定",
@@ -743,7 +743,7 @@ def flow(skin: str) -> str:
     sx, sy, sw_, sh_ = 812, 106, 254, 194
     v.rect(sx, sy, sw_, sh_, r=18, fill=s["card"], stroke=edge, shadow=True)
     v.rect(sx, sy + 14, 4, sh_ - 28, r=2, fill=mark, stroke=None)
-    v.text(sx + 18, sy + 26, "import.check · summary", 11, fill=faint,
+    v.text(sx + 18, sy + 26, "import_check · summary", 11, fill=faint,
            mono=True)
     v.text(sx + 18, sy + 58, "pass = false", 21, fill=mark,
            weight=700, mono=True)
@@ -768,7 +768,7 @@ def flow(skin: str) -> str:
     # ---- export card (fed by A only) ---------------------------------------
     ex, ey, ew, eh = 812, 318, 254, 122
     v.rect(ex, ey, ew, eh, r=18, fill=s["card"], stroke=edge, shadow=True)
-    v.text(ex + 18, ey + 26, "import.export", 13.5, fill=text,
+    v.text(ex + 18, ey + 26, "import_export", 13.5, fill=text,
            weight=700, mono=True)
     v.chip_r(ex + ew - 14, ey + 13, "R1 本地写", 10, fg=green, bg=pill)
     v.text(ex + 18, ey + 48, "CSV · 9 行 · sha256", 11, fill=sub, mono=True)
@@ -785,7 +785,7 @@ def flow(skin: str) -> str:
     bx, by, bw, bh = 286, 450, 506, 156
     v.rect(bx, by, bw, bh, r=20, fill=s["card"], stroke=edge, shadow=True)
     v.text(bx + 20, by + 28, "B · 要素完整性", 15.5, fill=text, weight=700)
-    v.text(bx + 134, by + 28, "import.elements", 12.5, fill=acc,
+    v.text(bx + 134, by + 28, "import_elements", 12.5, fill=acc,
            weight=700, mono=True)
     v.chip_r(bx + bw - 16, by + 14, "R0 只读", 10.2, fg=acc, bg=pill)
 

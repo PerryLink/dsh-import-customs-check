@@ -10,15 +10,15 @@ import { createTools } from '../lib/plugin/tools.js'
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const samplePath = path.join(packageRoot, 'samples', 'quickstart', 'input', 'import-set.json')
 
-test('createTools exposes the three import.* tools with unique names', () => {
+test('createTools exposes the three import_* tools with unique names', () => {
   const tools = createTools({ baseDir: path.join(os.tmpdir(), 'dsh-import-check-smoke') })
   assert.deepEqual(
     tools.map((tool) => tool.name),
-    ['import.check', 'import.elements', 'import.export'],
+    ['import_check', 'import_elements', 'import_export'],
   )
   assert.equal(new Set(tools.map((tool) => tool.name)).size, 3)
   for (const tool of tools) {
-    assert.ok(tool.name.startsWith('import.'))
+    assert.ok(tool.name.startsWith('import_'))
     assert.ok(tool.description.length > 0)
     assert.equal(typeof tool.execute, 'function')
     assert.equal(typeof tool.output.render, 'function')
@@ -52,7 +52,7 @@ test('apply() registers the tools and wires the documented write root', async (t
   assert.deepEqual(plugin.inject, ['tools'])
   assert.equal(registered.length, 3)
 
-  const exporter = registered.find((tool) => tool.name === 'import.export')
+  const exporter = registered.find((tool) => tool.name === 'import_export')
   const result = await exporter.execute({ path: samplePath, filename: 'apply.csv' }, { callId: 'apply' })
   assert.ok(result.path.startsWith(`${dir}${path.sep}exports${path.sep}`), result.path)
   assert.equal(result.rows, 9)
@@ -62,15 +62,15 @@ test('every tool render returns one text block', async () => {
   const tools = Object.fromEntries(
     createTools({ baseDir: path.join(os.tmpdir(), 'dsh-import-check-render') }).map((tool) => [tool.name, tool]),
   )
-  const check = await tools['import.check'].execute({ path: samplePath }, { callId: 'render' })
-  const rendered = tools['import.check'].output.render({ path: samplePath }, check)
+  const check = await tools['import_check'].execute({ path: samplePath }, { callId: 'render' })
+  const rendered = tools['import_check'].output.render({ path: samplePath }, check)
   assert.equal(rendered.length, 1)
   assert.equal(rendered[0].type, 'text')
   assert.match(rendered[0].text, /Import check SHP-2026-0618/)
   assert.match(rendered[0].text, /pass=false/)
 
-  const elements = await tools['import.elements'].execute({ path: samplePath }, { callId: 'render' })
-  const elementsText = tools['import.elements'].output.render({ path: samplePath }, elements)[0].text
+  const elements = await tools['import_elements'].execute({ path: samplePath }, { callId: 'render' })
+  const elementsText = tools['import_elements'].output.render({ path: samplePath }, elements)[0].text
   assert.match(elementsText, /11\/12 present/)
   assert.match(elementsText, /装货港/)
 })

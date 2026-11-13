@@ -13,7 +13,7 @@
 
 - **症状**：`进口单证集缺单证，或单证内容读不了（E_IMPORT_DOC_MISSING）｜下一步：JSON 里放齐 ...｜细节：单证集 JSON 解析失败，读不出任何单证`
 - **原因**：多了一个逗号、少了引号、文件被截断，或复制时混入了 BOM/注释/尾随文本。
-- **动作**：用 `node -e "JSON.parse(require('fs').readFileSync('文件','utf8'))"` 或编辑器 JSON 校验先确认能解析；修好后再跑 `import.check`。本包不猜测损坏的 JSON。
+- **动作**：用 `node -e "JSON.parse(require('fs').readFileSync('文件','utf8'))"` 或编辑器 JSON 校验先确认能解析；修好后再跑 `import_check`。本包不猜测损坏的 JSON。
 
 ## 3. 单证不是对象或重复（E_IMPORT_DOC_MISSING）
 
@@ -23,9 +23,9 @@
 
 ## 4. 严格模式发现不一致（E_IMPORT_FIELD_MISMATCH）
 
-- **症状**：`单证之间的字段对不上（strict 模式下才会中断）（E_IMPORT_FIELD_MISMATCH）｜下一步：先看 import.check 的逐字段表，改单后再用 strict=true 复跑｜细节：字段：毛重`
+- **症状**：`单证之间的字段对不上（strict 模式下才会中断）（E_IMPORT_FIELD_MISMATCH）｜下一步：先看 import_check 的逐字段表，改单后再用 strict=true 复跑｜细节：字段：毛重`
 - **原因**：`strict: true` 时至少一个字段是 `mismatch`，通常是毛重、净重、金额或件数在不同单证上不一致。
-- **动作**：先跑不带 `strict` 的 `import.check`，看 `fields[].values` 和 `note` 定位到具体单证；改单后复跑。不要在代码里把 `strict` 改成 `false` 来“修复”数据。
+- **动作**：先跑不带 `strict` 的 `import_check`，看 `fields[].values` 和 `note` 定位到具体单证；改单后复跑。不要在代码里把 `strict` 改成 `false` 来“修复”数据。
 
 ## 5. 输入路径读不了（E_IMPORT_PATH_INVALID）
 
@@ -41,7 +41,7 @@
 
 ## 7. 明明是同一个值却报 mismatch
 
-- **症状**：`import.check` 里某字段 `status=mismatch`，但人工看觉得一样。
+- **症状**：`import_check` 里某字段 `status=mismatch`，但人工看觉得一样。
 - **原因**：比较前只做固定规范化：发票号/合同号/原产国会转大写并合并空格，HS 去点/空格/连字符，重量按 0.001 kg、金额按 0.01 half-up；`CN` 与 `China`、`USD` 与 `US$` 仍是不同值。
 - **动作**：看该字段 `values[].normalized` 是否不同；把四份单证统一成同一种写法（如都用 `CN`、`USD`、`84713000`）。不要为了过检直接改金额或重量。
 
@@ -53,7 +53,7 @@
 
 ## 9. 报关单要素缺项
 
-- **症状**：`import.elements` 返回 `complete=false`，`missing` 里列出“装货港”等。
+- **症状**：`import_elements` 返回 `complete=false`，`missing` 里列出“装货港”等。
 - **原因**：报关单对象里没有该 key，或值是空字符串 / `null` / 对象。
 - **动作**：按 `missing[].key` 补上非空文本（如 `port_of_loading: "上海港"`）。12 项清单见 README；这是本包约定的表头完整性清单，不等于海关法定校验。
 
@@ -72,4 +72,4 @@ node scripts/gate.mjs                     # 元数据 + 验收门
 ```
 
 仍失败时请在 <https://github.com/PerryLink/dsh-import-customs-check/issues> 附上：包版本、最小合成 JSON（或生成脚本）、
-`import.check` / `import.elements` 的完整报错行、Node 与 DSH 版本。**不要附真实报关单、提单或客户数据。**
+`import_check` / `import_elements` 的完整报错行、Node 与 DSH 版本。**不要附真实报关单、提单或客户数据。**

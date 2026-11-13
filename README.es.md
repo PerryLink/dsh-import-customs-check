@@ -41,7 +41,7 @@ En una frase: lee el JSON de cuatro documentos de un envío de importación (fac
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="Estructura de dsh-import-customs-check: a la izquierda una tarjeta alta de import-set.json con los cuatro documentos y su cobertura (factura 9/9, lista de empaque 5/9, conocimiento de embarque 5/9, declaración 9/9; solo lectura, hasta 5 MB), que se reparte por un bus en dos canales que nunca se mezclan. A es el marcador de consistencia: primero normaliza (mayúsculas, espacios, comas, HS sin puntos ni guiones, 0,001 kg y 0,01 half-up) y cada uno de los 9 campos cae en uno de cuatro estados; el ejemplo da 8 consistentes y 1 discrepancia (peso bruto 2450.50 en la declaración frente a 2450.00 tres veces), así que pass=false y strict lanzaría E_IMPORT_FIELD_MISMATCH. B es la tira de 12 casillas de la declaración: 11 presentes, falta el puerto de carga, complete=false, y esto nunca cambia pass. Solo A llega a import.export, que escribe el CSV de 9 filas y el sha256 en $DSH_HOME/dsh-import-customs-check/exports/">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="Estructura de dsh-import-customs-check: a la izquierda una tarjeta alta de import-set.json con los cuatro documentos y su cobertura (factura 9/9, lista de empaque 5/9, conocimiento de embarque 5/9, declaración 9/9; solo lectura, hasta 5 MB), que se reparte por un bus en dos canales que nunca se mezclan. A es el marcador de consistencia: primero normaliza (mayúsculas, espacios, comas, HS sin puntos ni guiones, 0,001 kg y 0,01 half-up) y cada uno de los 9 campos cae en uno de cuatro estados; el ejemplo da 8 consistentes y 1 discrepancia (peso bruto 2450.50 en la declaración frente a 2450.00 tres veces), así que pass=false y strict lanzaría E_IMPORT_FIELD_MISMATCH. B es la tira de 12 casillas de la declaración: 11 presentes, falta el puerto de carga, complete=false, y esto nunca cambia pass. Solo A llega a import_export, que escribe el CSV de 9 filas y el sha256 en $DSH_HOME/dsh-import-customs-check/exports/">
 </picture>
 
 ## Instalación en tres pasos
@@ -80,13 +80,13 @@ Los nombres de las herramientas son API estable; sus descripciones se mantienen 
 
 | Herramienta | Propósito | Riesgo |
 |---|---|---|
-| `import.check` | Cruza los 9 campos de cabecera entre los cuatro documentos; `strict=true` falla si hay discrepancia | R0 |
-| `import.elements` | Revisa los 12 elementos de cabecera obligatorios de la declaración y enumera los que faltan | R0 |
-| `import.export` | Escribe la tabla de verificación por campo como CSV y devuelve ruta + sha256 | R1 escritura local |
+| `import_check` | Cruza los 9 campos de cabecera entre los cuatro documentos; `strict=true` falla si hay discrepancia | R0 |
+| `import_elements` | Revisa los 12 elementos de cabecera obligatorios de la declaración y enumera los que faltan | R0 |
+| `import_export` | Escribe la tabla de verificación por campo como CSV y devuelve ruta + sha256 | R1 escritura local |
 
 - **Cuatro estados por campo** — `consistent` / `mismatch` / `single_source` / `not_provided`; `summary` los cuenta y `pass = mismatch === 0`, así que un campo que solo aporta un documento nunca se confunde con una contradicción.
 - **Puerta estricta** — con `strict: true`, cualquier `mismatch` lanza `E_IMPORT_FIELD_MISMATCH`, listo para automatización; el modo por defecto informa sin interrumpir.
-- **Completitud de 12 elementos** — `import.elements` revisa la cabecera de la declaración por separado y devuelve `{ complete, total, present, missing }`, con `key` y etiqueta china para cada faltante.
+- **Completitud de 12 elementos** — `import_elements` revisa la cabecera de la declaración por separado y devuelve `{ complete, total, present, missing }`, con `key` y etiqueta china para cada faltante.
 - **Normalización fija** — factura/contrato/origen en mayúsculas y espacios colapsados, código HS sin puntos/espacios/guiones, pesos a 0.001 kg e importes a 0.01 con redondeo half-up; sin mapeo semántico como `CN` ↔ `China`.
 - **Solo local, solo lectura** — lee el JSON indicado y escribe únicamente bajo `$DSH_HOME/dsh-import-customs-check/exports/`; sin red, sin llamadas al modelo, sin subidas y sin modificar el archivo de origen.
 - **Errores con siguiente acción** — cada error es `<una frase>（E_IMPORT_XXX）｜下一步：<una acción>`; ver «Códigos de error».
@@ -128,9 +128,9 @@ gross_weight_kg / 毛重
 
 ## Salida
 
-- `import.check`: tabla por campo. Cada campo lleva `status`, `compared` (número de documentos que lo aportan), `values` (valor bruto, valor normalizado y marca de inválido por documento) y `note`. `summary` cuenta `consistent / mismatch / single_source / not_provided`, y `pass = mismatch === 0`.
-- `import.elements`: completitud de los 12 elementos de cabecera de la declaración como `{ complete, total, present, missing: [{ key, label }] }`.
-- `import.export`: escribe la tabla de campos bajo `$DSH_HOME/dsh-import-customs-check/exports/` con una fila por campo y una columna por documento; devuelve ruta, `sha256`, bytes y filas.
+- `import_check`: tabla por campo. Cada campo lleva `status`, `compared` (número de documentos que lo aportan), `values` (valor bruto, valor normalizado y marca de inválido por documento) y `note`. `summary` cuenta `consistent / mismatch / single_source / not_provided`, y `pass = mismatch === 0`.
+- `import_elements`: completitud de los 12 elementos de cabecera de la declaración como `{ complete, total, present, missing: [{ key, label }] }`.
+- `import_export`: escribe la tabla de campos bajo `$DSH_HOME/dsh-import-customs-check/exports/` con una fila por campo y una columna por documento; devuelve ruta, `sha256`, bytes y filas.
 
 | status | Significado | ¿Cuenta como fallo? |
 |---|---|---|
@@ -139,7 +139,7 @@ gross_weight_kg / 毛重
 | `single_source` | Solo 1 documento aporta el campo, así que no se puede cruzar | No |
 | `not_provided` | Ninguno de los cuatro documentos trae el campo | No |
 
-`import.check` devuelve la tabla completa por defecto. Con `strict: true`, cualquier `mismatch` lanza `E_IMPORT_FIELD_MISMATCH`, adecuado para puertas automáticas.
+`import_check` devuelve la tabla completa por defecto. Con `strict: true`, cualquier `mismatch` lanza `E_IMPORT_FIELD_MISMATCH`, adecuado para puertas automáticas.
 
 ## Ejemplo
 
@@ -165,26 +165,26 @@ Este plugin **no tiene claves de Config**: todo se ajusta con los parámetros de
 
 | Herramienta | Parámetro | Obligatorio | Significado |
 |---|---|---|---|
-| `import.check` | `path` | sí | Ruta absoluta del JSON de un solo envío |
-| `import.check` | `strict` | no | `true` lanza `E_IMPORT_FIELD_MISMATCH` ante cualquier `mismatch`; por defecto `false` |
-| `import.elements` | `path` | sí | Igual que arriba |
-| `import.export` | `path` | sí | Igual que arriba |
-| `import.export` | `filename` | no | Nombre del archivo exportado, solo `[A-Za-z0-9._-]`; por defecto `import-check-<primeros 12 caracteres de input_sha256>.csv` |
+| `import_check` | `path` | sí | Ruta absoluta del JSON de un solo envío |
+| `import_check` | `strict` | no | `true` lanza `E_IMPORT_FIELD_MISMATCH` ante cualquier `mismatch`; por defecto `false` |
+| `import_elements` | `path` | sí | Igual que arriba |
+| `import_export` | `path` | sí | Igual que arriba |
+| `import_export` | `filename` | no | Nombre del archivo exportado, solo `[A-Za-z0-9._-]`; por defecto `import-check-<primeros 12 caracteres de input_sha256>.csv` |
 
 Ejemplos de llamada (superficie de herramientas):
 
 ```sh
 # 1) consistencia por campo
-#    superficie: import.check({ path: "/abs/path/import-set.json" })
+#    superficie: import_check({ path: "/abs/path/import-set.json" })
 
 # 2) puerta estricta (falla si hay discrepancia)
-#    superficie: import.check({ path: "/abs/path/import-set.json", strict: true })
+#    superficie: import_check({ path: "/abs/path/import-set.json", strict: true })
 
 # 3) elementos de la declaración
-#    superficie: import.elements({ path: "/abs/path/import-set.json" })
+#    superficie: import_elements({ path: "/abs/path/import-set.json" })
 
 # 4) exportar la tabla
-#    superficie: import.export({ path: "/abs/path/import-set.json" })
+#    superficie: import_export({ path: "/abs/path/import-set.json" })
 ```
 
 Las pruebas pueden sobrescribir la raíz de escritura local con la variable de entorno `DSH_IMPORT_CUSTOMS_CHECK_HOME`; el valor por defecto es exactamente `$DSH_HOME/dsh-import-customs-check`.
@@ -227,7 +227,7 @@ Estos 12 son la **lista de cabecera acordada por este paquete**, no una regla de
 <details>
 <summary>¿Qué ocurre si falta un documento?</summary>
 
-Tanto `import.check` como `import.elements` lanzan `E_IMPORT_DOC_MISSING`, y el detalle indica qué falta (por ejemplo, «falta: conocimiento de embarque»). El paquete no adivina el cuarto documento a partir de tres; añádelo y vuelve a ejecutar. Si un documento realmente no aplica, confírmalo en el proceso de negocio en lugar de borrar una clave.
+Tanto `import_check` como `import_elements` lanzan `E_IMPORT_DOC_MISSING`, y el detalle indica qué falta (por ejemplo, «falta: conocimiento de embarque»). El paquete no adivina el cuarto documento a partir de tres; añádelo y vuelve a ejecutar. Si un documento realmente no aplica, confírmalo en el proceso de negocio en lugar de borrar una clave.
 
 </details>
 
@@ -241,7 +241,7 @@ Tanto `import.check` como `import.elements` lanzan `E_IMPORT_DOC_MISSING`, y el 
 <details>
 <summary>¿Por qué un `port_of_loading` ausente no es un `mismatch`?</summary>
 
-La comprobación de los 12 elementos es una herramienta aparte (`import.elements`) y no se mezcla con los nueve campos de consistencia. Un elemento ausente pone `complete=false` y enumera lo que falta; no cambia el `pass` de `import.check`.
+La comprobación de los 12 elementos es una herramienta aparte (`import_elements`) y no se mezcla con los nueve campos de consistencia. Un elemento ausente pone `complete=false` y enumera lo que falta; no cambia el `pass` de `import_check`.
 
 </details>
 
@@ -273,14 +273,14 @@ Escritura: solo `$DSH_HOME/dsh-import-customs-check/exports/`; el JSON de origen
 Red: no.
 Sistemas externos: ninguno.
 
-`import.check` e `import.elements` son **R0** (solo lectura). `import.export` es **R1** (escritura local bajo `$DSH_HOME/dsh-import-customs-check/exports/`). `DSH_IMPORT_CUSTOMS_CHECK_HOME` puede sobrescribir la raíz de escritura local en pruebas; el valor por defecto es exactamente `$DSH_HOME/dsh-import-customs-check`.
+`import_check` e `import_elements` son **R0** (solo lectura). `import_export` es **R1** (escritura local bajo `$DSH_HOME/dsh-import-customs-check/exports/`). `DSH_IMPORT_CUSTOMS_CHECK_HOME` puede sobrescribir la raíz de escritura local en pruebas; el valor por defecto es exactamente `$DSH_HOME/dsh-import-customs-check`.
 
 ## Códigos de error
 
 | Código | Cuándo | Siguiente acción |
 |---|---|---|
 | `E_IMPORT_DOC_MISSING` | Falta uno de los cuatro documentos, el JSON está mal formado, un documento no es objeto, hay duplicados, o el archivo está vacío o supera 5 MB | Proporciona los cuatro documentos y revisa la forma del JSON |
-| `E_IMPORT_FIELD_MISMATCH` | `strict: true` y al menos un campo es `mismatch` | Lee la tabla de `import.check`, corrige el documento y vuelve a ejecutar |
+| `E_IMPORT_FIELD_MISMATCH` | `strict: true` y al menos un campo es `mismatch` | Lee la tabla de `import_check`, corrige el documento y vuelve a ejecutar |
 | `E_IMPORT_PATH_INVALID` | Ruta de entrada inexistente / directorio / ilegible, directorio de exportación no escribible, o nombre de archivo de exportación inseguro | Pasa un JSON existente; exporta con `[A-Za-z0-9._-]` únicamente |
 
 El formato del mensaje es `<una frase>（E_IMPORT_XXX）｜下一步：<una acción>`. Ver [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
@@ -324,7 +324,7 @@ Los fixtures públicos/sintéticos están en `samples/quickstart/`; `ACCEPTANCE.
 
 ## Ecosistema y calidad
 
-- [Paquete npm](https://www.npmjs.com/package/dsh-import-customs-check) (`0.1.0` publicado, con README y tarball)
+- [Paquete npm](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.0` publicado, con README y tarball)
 - [Índice de dominio](https://perrylink.github.io/dsh-plugins/) (catálogo de plugins de PerryLink, incluye este plugin)
 - [Flujo CI](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml) (historial real de `ci.yml`)
 
@@ -343,7 +343,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-Versión actual `0.1.0`; 58 pruebas pasan (`node --test test/*.test.mjs`). Puerta de publicación: `node scripts/gate.mjs` (lint de metadatos + todas las filas públicas de aceptación + los tres códigos de error estables ejercitados). Las imágenes del README se generan con [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): las bandas hero con Pillow (zh / en × claro / oscuro, cuatro archivos) y el diagrama de estructura como SVG escrito a mano (claro y oscuro), y se pueden volver a ejecutar con `python scripts/gen-readme-assets.py`; el diagrama de flujo de una sola piel se conserva en `docs/assets/` para enlaces externos, mientras que los README solo referencian el nuevo juego de hero y el par flow-v5. `docs/assets/quickstart.png` es una captura real, conservada junto con `docs/assets/quickstart.log`.
+Versión actual `0.2.0`; 59 pruebas pasan (`node --test test/*.test.mjs`). Puerta de publicación: `node scripts/gate.mjs` (lint de metadatos + todas las filas públicas de aceptación + los tres códigos de error estables ejercitados). Las imágenes del README se generan con [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): las bandas hero con Pillow (zh / en × claro / oscuro, cuatro archivos) y el diagrama de estructura como SVG escrito a mano (claro y oscuro), y se pueden volver a ejecutar con `python scripts/gen-readme-assets.py`; el diagrama de flujo de una sola piel se conserva en `docs/assets/` para enlaces externos, mientras que los README solo referencian el nuevo juego de hero y el par flow-v5. `docs/assets/quickstart.png` es una captura real, conservada junto con `docs/assets/quickstart.log`.
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 

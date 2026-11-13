@@ -41,7 +41,7 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-import-customs-check-flow-v5-dark.svg">
-  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check 结构图：左侧是高高的 import-set.json 单证集，列出四份单证的字段覆盖（发票 9/9、装箱单 5/9、提单 5/9、报关单 9/9，只读、≤5 MB），经一条总线分给两条互不混用的通道。A 是一致性记分台：先规范化（转大写、合并/去空格、去逗号、HS 去点/连字符、0.001 kg 与 0.01 half-up），9 个字段各落四态之一；样例 8 一致、1 不一致（报关单毛重 2450.50 对其余三份 2450.00），所以 pass=false，strict 会抛 E_IMPORT_FIELD_MISMATCH。B 是报关单 12 格要素条：11 项在、装货港缺，complete=false，且不影响 pass。只有 A 通向 import.export，按 9 行 CSV 加 sha256 写到 $DSH_HOME/dsh-import-customs-check/exports/">
+  <img src="docs/assets/dsh-import-customs-check-flow-v5-light.svg" width="100%" alt="dsh-import-customs-check 结构图：左侧是高高的 import-set.json 单证集，列出四份单证的字段覆盖（发票 9/9、装箱单 5/9、提单 5/9、报关单 9/9，只读、≤5 MB），经一条总线分给两条互不混用的通道。A 是一致性记分台：先规范化（转大写、合并/去空格、去逗号、HS 去点/连字符、0.001 kg 与 0.01 half-up），9 个字段各落四态之一；样例 8 一致、1 不一致（报关单毛重 2450.50 对其余三份 2450.00），所以 pass=false，strict 会抛 E_IMPORT_FIELD_MISMATCH。B 是报关单 12 格要素条：11 项在、装货港缺，complete=false，且不影响 pass。只有 A 通向 import_export，按 9 行 CSV 加 sha256 写到 $DSH_HOME/dsh-import-customs-check/exports/">
 </picture>
 
 ## 三步上手
@@ -80,13 +80,13 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 | 工具 | 用途 | 风险 |
 |---|---|---|
-| `import.check` | 对 9 个表头字段做四单证一致性核对，返回逐字段表；`strict=true` 时不一致即报错 | R0 |
-| `import.elements` | 检查报关单 12 项必填要素，返回缺项列表 | R0 |
-| `import.export` | 把逐字段核对表导出成 CSV，返回路径与 sha256 | R1 本地写 |
+| `import_check` | 对 9 个表头字段做四单证一致性核对，返回逐字段表；`strict=true` 时不一致即报错 | R0 |
+| `import_elements` | 检查报关单 12 项必填要素，返回缺项列表 | R0 |
+| `import_export` | 把逐字段核对表导出成 CSV，返回路径与 sha256 | R1 本地写 |
 
 - **逐字段状态** —— `consistent` / `mismatch` / `single_source` / `not_provided` 四态；`summary` 计数，`pass = mismatch === 0`，不会把「只有一份单证提供」误判成不一致。
 - **严格门禁** —— 传 `strict: true` 时，任意 `mismatch` 都会抛 `E_IMPORT_FIELD_MISMATCH`，适合接进自动流程；默认模式只报告、不中断。
-- **12 项要素完整性** —— `import.elements` 独立检查报关单表头，返回 `{ complete, total, present, missing }`，缺项带 `key` 与中文标签。
+- **12 项要素完整性** —— `import_elements` 独立检查报关单表头，返回 `{ complete, total, present, missing }`，缺项带 `key` 与中文标签。
 - **固定规范化口径** —— 发票号/合同号/原产国转大写并合并空格，HS 去点/空格/连字符，重量按 0.001 kg、金额按 0.01 half-up；不做 `CN` ↔ `China` 这类语义映射。
 - **纯本地、只读** —— 只读用户指定的 JSON，只写 `$DSH_HOME/dsh-import-customs-check/exports/`；不联网、不调用模型、不上传，源文件永不修改。
 - **报错带下一步** —— 每个错误都是 `<一句人话>（E_IMPORT_XXX）｜下一步：<一个动作>`，见「错误码」。
@@ -117,9 +117,9 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 
 ## 输出
 
-- `import.check`：逐字段表。每个字段一行，含 `status`、`compared`（提供该字段的单证数）、`values`（每份单证的原始值、规范化值、是否格式错误）和 `note`。`summary` 统计 `consistent / mismatch / single_source / not_provided`，`pass = mismatch === 0`。
-- `import.elements`：报关单 12 项必填要素的完整性，返回 `{ complete, total, present, missing: [{ key, label }] }`。
-- `import.export`：把逐字段表写到 `$DSH_HOME/dsh-import-customs-check/exports/`，一行一个字段、一列一份单证，返回路径、`sha256`、字节数和行数。
+- `import_check`：逐字段表。每个字段一行，含 `status`、`compared`（提供该字段的单证数）、`values`（每份单证的原始值、规范化值、是否格式错误）和 `note`。`summary` 统计 `consistent / mismatch / single_source / not_provided`，`pass = mismatch === 0`。
+- `import_elements`：报关单 12 项必填要素的完整性，返回 `{ complete, total, present, missing: [{ key, label }] }`。
+- `import_export`：把逐字段表写到 `$DSH_HOME/dsh-import-customs-check/exports/`，一行一个字段、一列一份单证，返回路径、`sha256`、字节数和行数。
 
 状态含义：
 
@@ -130,7 +130,7 @@ dsh plugin --profile <profile> add dsh-import-customs-check
 | `single_source` | 只有 1 份单证提供该字段，无法交叉核对 | 否 |
 | `not_provided` | 四份单证都没有这个字段 | 否 |
 
-`import.check` 默认返回完整表格；传 `strict: true` 时，只要有 `mismatch` 就抛 `E_IMPORT_FIELD_MISMATCH`，适合放进自动门禁。
+`import_check` 默认返回完整表格；传 `strict: true` 时，只要有 `mismatch` 就抛 `E_IMPORT_FIELD_MISMATCH`，适合放进自动门禁。
 
 ## 示例
 
@@ -156,26 +156,26 @@ node samples/quickstart/run.mjs --check
 
 | 工具 | 参数 | 必填 | 含义 |
 |---|---|---|---|
-| `import.check` | `path` | 是 | 单票进口单证集 JSON 的绝对路径 |
-| `import.check` | `strict` | 否 | `true` 时任意 `mismatch` 抛 `E_IMPORT_FIELD_MISMATCH`；默认 `false` |
-| `import.elements` | `path` | 是 | 同上 |
-| `import.export` | `path` | 是 | 同上 |
-| `import.export` | `filename` | 否 | 导出文件名，只允许 `[A-Za-z0-9._-]`；默认 `import-check-<input_sha256 前 12 位>.csv` |
+| `import_check` | `path` | 是 | 单票进口单证集 JSON 的绝对路径 |
+| `import_check` | `strict` | 否 | `true` 时任意 `mismatch` 抛 `E_IMPORT_FIELD_MISMATCH`；默认 `false` |
+| `import_elements` | `path` | 是 | 同上 |
+| `import_export` | `path` | 是 | 同上 |
+| `import_export` | `filename` | 否 | 导出文件名，只允许 `[A-Za-z0-9._-]`；默认 `import-check-<input_sha256 前 12 位>.csv` |
 
 调用示例（工具面）：
 
 ```sh
 # 1) 看逐字段一致性
-#    工具面：import.check({ path: "/abs/path/import-set.json" })
+#    工具面：import_check({ path: "/abs/path/import-set.json" })
 
 # 2) 严格门禁（有不一致就报错）
-#    工具面：import.check({ path: "/abs/path/import-set.json", strict: true })
+#    工具面：import_check({ path: "/abs/path/import-set.json", strict: true })
 
 # 3) 看报关单要素
-#    工具面：import.elements({ path: "/abs/path/import-set.json" })
+#    工具面：import_elements({ path: "/abs/path/import-set.json" })
 
 # 4) 导出核对表
-#    工具面：import.export({ path: "/abs/path/import-set.json" })
+#    工具面：import_export({ path: "/abs/path/import-set.json" })
 ```
 
 测试可用环境变量 `DSH_IMPORT_CUSTOMS_CHECK_HOME` 覆盖本地写根目录；默认严格等于 `$DSH_HOME/dsh-import-customs-check`。
@@ -218,21 +218,21 @@ node samples/quickstart/run.mjs --check
 <details>
 <summary>缺一份单证会怎样？</summary>
 
-`import.check` 和 `import.elements` 都会报 `E_IMPORT_DOC_MISSING`，并在细节里写出缺哪一份（如“缺：提单”）。本包不会用三份单证“猜”第四份；请补齐后再跑。若某份单证确实不适用，请先在业务上确认，而不是删 key。
+`import_check` 和 `import_elements` 都会报 `E_IMPORT_DOC_MISSING`，并在细节里写出缺哪一份（如“缺：提单”）。本包不会用三份单证“猜”第四份；请补齐后再跑。若某份单证确实不适用，请先在业务上确认，而不是删 key。
 
 </details>
 
 <details>
 <summary>`mismatch` 和 `E_IMPORT_FIELD_MISMATCH` 有什么区别？</summary>
 
-`mismatch` 是结果表里的一个状态，默认只报告、不中断；`E_IMPORT_FIELD_MISMATCH` 是 `strict: true` 时的错误码。把 `import.check` 接进自动流程时用 `strict: true`，人工复核时用默认模式看完整表。
+`mismatch` 是结果表里的一个状态，默认只报告、不中断；`E_IMPORT_FIELD_MISMATCH` 是 `strict: true` 时的错误码。把 `import_check` 接进自动流程时用 `strict: true`，人工复核时用默认模式看完整表。
 
 </details>
 
 <details>
 <summary>报关单缺 `port_of_loading` 为什么不算 `mismatch`？</summary>
 
-12 项要素完整性由 `import.elements` 单独检查，不与 9 个一致性字段混在一起。缺要素时 `complete=false`、`missing` 列出缺项；它不会让 `import.check` 的 `pass` 变成 false。
+12 项要素完整性由 `import_elements` 单独检查，不与 9 个一致性字段混在一起。缺要素时 `complete=false`、`missing` 列出缺项；它不会让 `import_check` 的 `pass` 变成 false。
 
 </details>
 
@@ -264,14 +264,14 @@ node samples/quickstart/run.mjs --check
 联网：否。
 外部系统：无。
 
-`import.check`、`import.elements` 标 **R0**（只读）；`import.export` 标 **R1**（本地写，只写 `$DSH_HOME/dsh-import-customs-check/exports/`）。测试可用 `DSH_IMPORT_CUSTOMS_CHECK_HOME` 覆盖本地写根目录，默认严格等于 `$DSH_HOME/dsh-import-customs-check`。
+`import_check`、`import_elements` 标 **R0**（只读）；`import_export` 标 **R1**（本地写，只写 `$DSH_HOME/dsh-import-customs-check/exports/`）。测试可用 `DSH_IMPORT_CUSTOMS_CHECK_HOME` 覆盖本地写根目录，默认严格等于 `$DSH_HOME/dsh-import-customs-check`。
 
 ## 错误码
 
 | 错误码 | 何时出现 | 下一步 |
 |---|---|---|
 | `E_IMPORT_DOC_MISSING` | 四份单证缺一、JSON 解析失败、单证不是对象、同一单证重复、文件为空或超 5 MB | 补齐四份单证，检查 JSON 结构 |
-| `E_IMPORT_FIELD_MISMATCH` | `strict: true` 且至少一个字段 `mismatch` | 看 `import.check` 表，改单后复跑 |
+| `E_IMPORT_FIELD_MISMATCH` | `strict: true` 且至少一个字段 `mismatch` | 看 `import_check` 表，改单后复跑 |
 | `E_IMPORT_PATH_INVALID` | 输入路径不存在/是目录/读不了、导出目录不可写，或导出文件名含路径、空格、中文、超长 | 传存在的 JSON；导出只传 `[A-Za-z0-9._-]` 文件名 |
 
 报错原文格式：`<一句人话>（E_IMPORT_XXX）｜下一步：<一个动作>`。更多排查见 [TROUBLESHOOTING.md](TROUBLESHOOTING.md)。
@@ -315,7 +315,7 @@ node samples/quickstart/run.mjs --check
 
 ## 生态与质量
 
-- [npm 包页](https://www.npmjs.com/package/dsh-import-customs-check)（已发布 `0.1.0`，含 README 与 tarball）
+- [npm 包页](https://www.npmjs.com/package/dsh-import-customs-check)（已发布 `0.2.0`，含 README 与 tarball）
 - [领域索引](https://perrylink.github.io/dsh-plugins/)（PerryLink 插件目录，含本插件条目）
 - [CI 工作流](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml)（`ci.yml` 真实运行记录）
 
@@ -334,7 +334,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-当前版本 `0.1.0`，58 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成：hero 横幅用 Pillow（zh / en × 深浅共四张），结构图是手写 SVG（深浅双版），可重复执行（`python scripts/gen-readme-assets.py`）；旧的单版流程图保留在 `docs/assets/` 供外链使用，README 只引用新生成的 hero 与 flow-v5。`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
+当前版本 `0.2.0`，59 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成：hero 横幅用 Pillow（zh / en × 深浅共四张），结构图是手写 SVG（深浅双版），可重复执行（`python scripts/gen-readme-assets.py`）；旧的单版流程图保留在 `docs/assets/` 供外链使用，README 只引用新生成的 hero 与 flow-v5。`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
 
 Topics：`dsh`、`dsh-plugin`、`deepseek-harness`、`import`、`customs`、`trade-compliance`、`document-check`、`packing-list`、`bill-of-lading`、`perrylink`
 
