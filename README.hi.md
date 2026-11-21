@@ -157,6 +157,11 @@ node samples/quickstart/run.mjs --check
 
 ![dsh-import-customs-check quickstart का वास्तविक टर्मिनल आउटपुट](docs/assets/quickstart.png)
 
+![dsh-import-customs-check quickstart का वास्तविक टर्मिनल आउटपुट](docs/assets/dsh-import-customs-check-demo.gif)
+
+*उसी असली रन का एनिमेटेड संस्करण।*
+
+
 नमूना एक सिंथेटिक शिपमेंट है। सकल वज़न जानबूझकर डिक्लेरेशन पर `2450.50` और अन्य तीन दस्तावेज़ों पर `2450.00` है (एक `mismatch`); HS कोड इनवॉइस पर `8471.30.00` और डिक्लेरेशन पर `84713000` है, जो सामान्यीकरण के बाद एक ही मान है (फ़ॉर्मैट अंतर नहीं); डिक्लेरेशन जानबूझकर `port_of_loading` छोड़ता है ताकि छूटा तत्व दिखे। `samples/quickstart/expected/result.json` `node samples/quickstart/run.mjs --json` का वास्तविक आउटपुट है, हाथ से लिखा नहीं; कच्चा लॉग [`docs/assets/quickstart.log`](docs/assets/quickstart.log) में है।
 
 ## कॉन्फ़िगरेशन

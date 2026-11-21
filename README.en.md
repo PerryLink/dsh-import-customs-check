@@ -157,6 +157,11 @@ node samples/quickstart/run.mjs --check
 
 ![dsh-import-customs-check quickstart terminal output](docs/assets/quickstart.png)
 
+![dsh-import-customs-check quickstart terminal output](docs/assets/dsh-import-customs-check-demo.gif)
+
+*The animated version of the same run.*
+
+
 The sample is one synthetic shipment. Gross weight is deliberately `2450.50` on the declaration and `2450.00` on the other three documents (a `mismatch`); the HS code is `8471.30.00` on the invoice and `84713000` on the declaration, which normalizes to the same value (formatting is not a mismatch); the declaration deliberately omits `port_of_loading` to demonstrate a missing element. `samples/quickstart/expected/result.json` is the real stdout of `node samples/quickstart/run.mjs --json`, not hand-written; the raw log is kept at [`docs/assets/quickstart.log`](docs/assets/quickstart.log).
 
 ## Configuration

@@ -148,6 +148,11 @@ node samples/quickstart/run.mjs --check
 
 ![dsh-import-customs-check quickstart 真实运行输出](docs/assets/quickstart.png)
 
+![dsh-import-customs-check quickstart 真实运行输出](docs/assets/dsh-import-customs-check-demo.gif)
+
+*同一段真实运行的动图版本。*
+
+
 样例是一票合成货物：四份单证齐全，毛重在报关单上故意写成 `2450.50`（其余三份 `2450.00`），用来演示 `mismatch`；HS 编码在发票上是 `8471.30.00`、报关单上是 `84713000`，规范化后一致，用来演示格式差异不算不一致；报关单故意漏填 `port_of_loading`（装货港），用来演示 12 项要素缺项。金标 `samples/quickstart/expected/result.json` 由 `node samples/quickstart/run.mjs --json` 真实产生，不是手写；原始日志保存在 [`docs/assets/quickstart.log`](docs/assets/quickstart.log)。
 
 ## 配置

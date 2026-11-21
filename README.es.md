@@ -157,6 +157,11 @@ node samples/quickstart/run.mjs --check
 
 ![Salida real en terminal del quickstart de dsh-import-customs-check](docs/assets/quickstart.png)
 
+![Salida real en terminal del quickstart de dsh-import-customs-check](docs/assets/dsh-import-customs-check-demo.gif)
+
+*La versión animada de la misma ejecución.*
+
+
 El ejemplo es un envío sintético. El peso bruto es deliberadamente `2450.50` en la declaración y `2450.00` en los otros tres documentos (un `mismatch`); el código HS es `8471.30.00` en la factura y `84713000` en la declaración, que normaliza al mismo valor (el formato no es discrepancia); la declaración omite a propósito `port_of_loading` para demostrar un elemento faltante. `samples/quickstart/expected/result.json` es la salida real de `node samples/quickstart/run.mjs --json`, no escrita a mano; el registro bruto está en [`docs/assets/quickstart.log`](docs/assets/quickstart.log).
 
 ## Configuración
