@@ -11,6 +11,8 @@
 
 面向 DeepSeek Harness 的纯本地进口单证核对工具：读一份整理好的 JSON，交叉核对 9 个表头字段、检查报关单 12 项表头要素、需要时导出 CSV——不联网、不调用模型、不上传。
 
+最近一次核验：DeepSeek Harness `dsh-v0.2.3-alpha.1`（2026-11-22）。
+
 [安装](#三步上手) · [配置](#配置) · [FAQ](#faq) · [简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-3366CC?style=flat-square&labelColor=2B3245)](LICENSE)
@@ -151,7 +153,6 @@ node samples/quickstart/run.mjs --check
 ![dsh-import-customs-check quickstart 真实运行输出](docs/assets/dsh-import-customs-check-demo.gif)
 
 *同一段真实运行的动图版本。*
-
 
 样例是一票合成货物：四份单证齐全，毛重在报关单上故意写成 `2450.50`（其余三份 `2450.00`），用来演示 `mismatch`；HS 编码在发票上是 `8471.30.00`、报关单上是 `84713000`，规范化后一致，用来演示格式差异不算不一致；报关单故意漏填 `port_of_loading`（装货港），用来演示 12 项要素缺项。金标 `samples/quickstart/expected/result.json` 由 `node samples/quickstart/run.mjs --json` 真实产生，不是手写；原始日志保存在 [`docs/assets/quickstart.log`](docs/assets/quickstart.log)。
 
@@ -320,7 +321,7 @@ node samples/quickstart/run.mjs --check
 
 ## 生态与质量
 
-- [npm 包页](https://www.npmjs.com/package/dsh-import-customs-check)（已发布 `0.2.0`，含 README 与 tarball）
+- [npm 包页](https://www.npmjs.com/package/dsh-import-customs-check)（已发布 `0.2.1`，含 README 与 tarball）
 - [领域索引](https://perrylink.github.io/dsh-plugins/)（PerryLink 插件目录，含本插件条目）
 - [CI 工作流](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml)（`ci.yml` 真实运行记录）
 
@@ -339,7 +340,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-当前版本 `0.2.0`，59 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成：hero 横幅用 Pillow（zh / en × 深浅共四张），结构图是手写 SVG（深浅双版），可重复执行（`python scripts/gen-readme-assets.py`）；旧的单版流程图保留在 `docs/assets/` 供外链使用，README 只引用新生成的 hero 与 flow-v5。`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
+当前版本 `0.2.1`，59 项测试通过（`node --test test/*.test.mjs`）。发布门禁：`node scripts/gate.mjs`（元数据 lint + 公开验收行全过 + 三个稳定错误码全被触发）。README 配图由 [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) 程序化生成：hero 横幅用 Pillow（zh / en × 深浅共四张），结构图是手写 SVG（深浅双版），可重复执行（`python scripts/gen-readme-assets.py`）；旧的单版流程图保留在 `docs/assets/` 供外链使用，README 只引用新生成的 hero 与 flow-v5。`docs/assets/quickstart.png` 为真实运行截图，配合 `docs/assets/quickstart.log` 保留。
 
 Topics：`dsh`、`dsh-plugin`、`deepseek-harness`、`import`、`customs`、`trade-compliance`、`document-check`、`packing-list`、`bill-of-lading`、`perrylink`
 

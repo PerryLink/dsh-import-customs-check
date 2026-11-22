@@ -11,6 +11,8 @@
 
 DeepSeek Harness के लिए पूरी तरह लोकल दस्तावेज़-जाँच टूल: एक तैयार JSON पढ़ें, 9 हेडर फ़ील्ड क्रॉस-चेक करें, डिक्लेरेशन के 12 हेडर तत्व जाँचें और ज़रूरत हो तो CSV निर्यात करें — कोई नेटवर्क नहीं, कोई मॉडल कॉल नहीं, कोई अपलोड नहीं।
 
+अंतिम सत्यापन: DeepSeek Harness `dsh-v0.2.3-alpha.1` (2026-11-22).
+
 [इंस्टॉल](#तीन-चरणों-में-शुरुआत) · [कॉन्फ़िगरेशन](#कॉन्फ़िगरेशन) · [FAQ](#faq) · [简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-3366CC?style=flat-square&labelColor=2B3245)](LICENSE)
@@ -160,7 +162,6 @@ node samples/quickstart/run.mjs --check
 ![dsh-import-customs-check quickstart का वास्तविक टर्मिनल आउटपुट](docs/assets/dsh-import-customs-check-demo.gif)
 
 *उसी असली रन का एनिमेटेड संस्करण।*
-
 
 नमूना एक सिंथेटिक शिपमेंट है। सकल वज़न जानबूझकर डिक्लेरेशन पर `2450.50` और अन्य तीन दस्तावेज़ों पर `2450.00` है (एक `mismatch`); HS कोड इनवॉइस पर `8471.30.00` और डिक्लेरेशन पर `84713000` है, जो सामान्यीकरण के बाद एक ही मान है (फ़ॉर्मैट अंतर नहीं); डिक्लेरेशन जानबूझकर `port_of_loading` छोड़ता है ताकि छूटा तत्व दिखे। `samples/quickstart/expected/result.json` `node samples/quickstart/run.mjs --json` का वास्तविक आउटपुट है, हाथ से लिखा नहीं; कच्चा लॉग [`docs/assets/quickstart.log`](docs/assets/quickstart.log) में है।
 
@@ -329,7 +330,7 @@ node samples/quickstart/run.mjs --check
 
 ## पारिस्थितिकी और गुणवत्ता
 
-- [npm पैकेज](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.0` प्रकाशित, README और tarball के साथ)
+- [npm पैकेज](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.1` प्रकाशित, README और tarball के साथ)
 - [डोमेन इंडेक्स](https://perrylink.github.io/dsh-plugins/) (PerryLink प्लगइन कैटलॉग, इसमें यह प्लगइन भी है)
 - [CI वर्कफ़्लो](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml) (`ci.yml` का वास्तविक रन इतिहास)
 
@@ -348,7 +349,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-वर्तमान संस्करण `0.2.0`; 59 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। README की छवियाँ [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनती हैं: hero बैनर Pillow से (zh / en × हल्का / गहरा, चार फ़ाइलें) और संरचना-चित्र हाथ से लिखे SVG के रूप में (हल्का और गहरा), जिन्हें `python scripts/gen-readme-assets.py` से दोबारा चलाया जा सकता है; पुराना एक-रूप फ़्लो चित्र बाहरी लिंक के लिए `docs/assets/` में रहता है, जबकि README केवल नए hero सेट और flow-v5 जोड़े का संदर्भ देते हैं। `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
+वर्तमान संस्करण `0.2.1`; 59 परीक्षण पास (`node --test test/*.test.mjs`)। रिलीज़ गेट: `node scripts/gate.mjs` (मेटाडेटा lint + सभी सार्वजनिक स्वीकृति पंक्तियाँ + तीनों स्थिर त्रुटि कोड का अभ्यास)। README की छवियाँ [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py) से प्रोग्रामेटिक रूप से बनती हैं: hero बैनर Pillow से (zh / en × हल्का / गहरा, चार फ़ाइलें) और संरचना-चित्र हाथ से लिखे SVG के रूप में (हल्का और गहरा), जिन्हें `python scripts/gen-readme-assets.py` से दोबारा चलाया जा सकता है; पुराना एक-रूप फ़्लो चित्र बाहरी लिंक के लिए `docs/assets/` में रहता है, जबकि README केवल नए hero सेट और flow-v5 जोड़े का संदर्भ देते हैं। `docs/assets/quickstart.png` वास्तविक कैप्चर है, `docs/assets/quickstart.log` के साथ रखा गया है।
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 

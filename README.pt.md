@@ -11,6 +11,8 @@
 
 Uma ferramenta puramente local para DeepSeek Harness: lê um JSON preparado, cruza 9 campos de cabeçalho, verifica os 12 elementos de cabeçalho da declaração e exporta CSV quando você precisa de um registro — sem rede, sem chamadas ao modelo, sem upload.
 
+Última verificação: DeepSeek Harness `dsh-v0.2.3-alpha.1` (2026-11-22).
+
 [Instalar](#instalação-em-três-passos) · [Configuração](#configuração) · [FAQ](#faq) · [简体中文](README.md) · [English](README.en.md) · [Español](README.es.md) · [Português](README.pt.md) · [हिन्दी](README.hi.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-3366CC?style=flat-square&labelColor=2B3245)](LICENSE)
@@ -160,7 +162,6 @@ node samples/quickstart/run.mjs --check
 ![Saída real no terminal do quickstart do dsh-import-customs-check](docs/assets/dsh-import-customs-check-demo.gif)
 
 *A versão animada da mesma execução.*
-
 
 O exemplo é um embarque sintético. O peso bruto é deliberadamente `2450.50` na declaração e `2450.00` nos outros três documentos (um `mismatch`); o código HS é `8471.30.00` na fatura e `84713000` na declaração, que normaliza para o mesmo valor (formatação não é divergência); a declaração omite de propósito `port_of_loading` para demonstrar um elemento ausente. `samples/quickstart/expected/result.json` é a saída real de `node samples/quickstart/run.mjs --json`, não escrita à mão; o log bruto está em [`docs/assets/quickstart.log`](docs/assets/quickstart.log).
 
@@ -329,7 +330,7 @@ Os fixtures públicos/sintéticos ficam em `samples/quickstart/`; `ACCEPTANCE.cs
 
 ## Ecossistema e qualidade
 
-- [Pacote npm](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.0` publicado, com README e tarball)
+- [Pacote npm](https://www.npmjs.com/package/dsh-import-customs-check) (`0.2.1` publicado, com README e tarball)
 - [Índice de domínio](https://perrylink.github.io/dsh-plugins/) (catálogo de plugins PerryLink, inclui este plugin)
 - [Fluxo de CI](https://github.com/PerryLink/dsh-import-customs-check/actions/workflows/ci.yml) (histórico real do `ci.yml`)
 
@@ -348,7 +349,7 @@ node --test test/*.test.mjs
 node scripts/gate.mjs
 ```
 
-Versão atual `0.2.0`; 59 testes passam (`node --test test/*.test.mjs`). Portão de publicação: `node scripts/gate.mjs` (lint de metadados + todas as linhas públicas de aceitação + os três códigos de erro estáveis exercitados). As imagens do README são geradas por [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): as faixas hero com Pillow (zh / en × claro / escuro, quatro arquivos) e o diagrama de estrutura como SVG escrito à mão (claro e escuro), e podem ser reexecutadas com `python scripts/gen-readme-assets.py`; o diagrama de fluxo de uma só pele fica em `docs/assets/` para ligações externas, enquanto os README apenas referenciam o novo conjunto de hero e o par flow-v5. `docs/assets/quickstart.png` é uma captura real, mantida junto com `docs/assets/quickstart.log`.
+Versão atual `0.2.1`; 59 testes passam (`node --test test/*.test.mjs`). Portão de publicação: `node scripts/gate.mjs` (lint de metadados + todas as linhas públicas de aceitação + os três códigos de erro estáveis exercitados). As imagens do README são geradas por [`scripts/gen-readme-assets.py`](scripts/gen-readme-assets.py): as faixas hero com Pillow (zh / en × claro / escuro, quatro arquivos) e o diagrama de estrutura como SVG escrito à mão (claro e escuro), e podem ser reexecutadas com `python scripts/gen-readme-assets.py`; o diagrama de fluxo de uma só pele fica em `docs/assets/` para ligações externas, enquanto os README apenas referenciam o novo conjunto de hero e o par flow-v5. `docs/assets/quickstart.png` é uma captura real, mantida junto com `docs/assets/quickstart.log`.
 
 Topics: `dsh`, `dsh-plugin`, `deepseek-harness`, `import`, `customs`, `trade-compliance`, `document-check`, `packing-list`, `bill-of-lading`, `perrylink`
 
